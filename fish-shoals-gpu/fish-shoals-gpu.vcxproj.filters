@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="main_program.cu" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_glfw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_opengl3.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_stdlib.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="app.cpp">
+      <Filter>control</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="scene.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="engine.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="cube.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="image.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="material.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="rectangle_model.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="gui_model.cpp">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="gui.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="config.cuh" />
+    <ClInclude Include="imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_glfw.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_opengl3.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_opengl3_loader.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_stdlib.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="app.h">
+      <Filter>control</Filter>
+    </ClInclude>
+    <ClInclude Include="cuda_utils.cuh">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="engine.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="cube.h">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="image.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="material.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="rectangle_model.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_model.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="gui.h">
+      <Filter>model</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imgui.natstepfilter">
+      <Filter>imgui</Filter>
+    </None>
+    <None Include="imgui.ini">
+      <Filter>imgui</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{2289be03-6d17-4256-98c0-c7d05459fb15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="control">
+      <UniqueIdentifier>{07c1ae57-8b75-4006-9b45-b159245de6cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{bd4ae057-c491-4d22-b233-b0d7a2c1a307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view">
+      <UniqueIdentifier>{e53eb7c1-0b38-4415-bc9f-eb52455241bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="model">
+      <UniqueIdentifier>{53b36c41-18d3-47f7-a6a0-143bda7cac24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{6782047f-af2c-4588-8d6a-f1a899b0f05a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="textures">
+      <UniqueIdentifier>{01e35c95-6ec8-4c13-a1b4-63fedf7628ec}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="imgui.natvis">
+      <Filter>imgui</Filter>
+    </Natvis>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="vertex.txt">
+      <Filter>shaders</Filter>
+    </Text>
+    <Text Include="fragment.txt">
+      <Filter>shaders</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="wood.jpeg">
+      <Filter>textures</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
