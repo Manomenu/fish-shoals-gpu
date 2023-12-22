@@ -1,6 +1,6 @@
 #include "engine.h"
 
-Engine::Engine(int width, int height) {
+Engine::Engine(int width, int height, int numberOfFishes) {
 
 	shader = new Shader("vertex.txt", "fragment.txt");
 	shader->use();
@@ -9,6 +9,8 @@ Engine::Engine(int width, int height) {
 
 	this->width = width;
 	this->height = height;
+	this->numberOfFishes = numberOfFishes;
+	fishModels = std::vector<PyramidModel*>(numberOfFishes);
 
 	float aspectRatio = (float)width / float(height);
 	//set up framebuffer
@@ -22,28 +24,29 @@ Engine::Engine(int width, int height) {
 }
 
 Engine::~Engine() {
-	delete woodMaterial;
-	delete cubeModel;
+	delete aquariumModel;
 	delete shader;
 }
 
 void Engine::createModels() {
-	RectangleModelCreateInfo cubeInfo;
-	cubeInfo.size = { 2.0f, 1.0f, 1.0f };
-	cubeModel = new RectangleModel(&cubeInfo);
+	RectangleModelCreateInfo aquariumInfo;
+	aquariumInfo.size = { AQUARIUM_SIZE };
+	aquariumModel = new RectangleModel(&aquariumInfo);
 
 	guiModel = new GuiModel();
+
+	FishesModelCreateInfo fishesInfo;
+	fishesInfo.numberOfFishes = numberOfFishes;
+	fishesModel = new FishesModel(&fishesInfo);
 }
 
 void Engine::createMaterials() {
-	MaterialCreateInfo materialInfo;
-	materialInfo.filename = "wood.jpeg";
-	woodMaterial = new Material(&materialInfo);
+	// i can create wood for example
 }
 
-void Engine::render(Scene* scene) {
-
-	//prepare shaders
+void Engine::render(Scene* scene)
+{
+	// prepraring universal transforms
 	glm::mat4 view_transform{
 		glm::lookAt(
 			scene->player->position,
@@ -57,19 +60,13 @@ void Engine::render(Scene* scene) {
 	glm::mat4 projection_transform = glm::perspective(FOVY, aspectRatio, NEAR, FAR);
 	shader->setMat4("projection", projection_transform);
 
-	glm::mat4 model_transform{ glm::mat4(1.0f) };
-	model_transform = glm::translate(model_transform, scene->cube->position);
-	model_transform =
-		model_transform * glm::eulerAngleXYZ(
-			scene->cube->eulers.x, scene->cube->eulers.y, scene->cube->eulers.z
-		);
-	shader->setMat4("model", model_transform);
-
+	// render scene
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	shader->use();
-	woodMaterial->use();
-	glBindVertexArray(cubeModel->VAO);
-	glDrawArrays(GL_TRIANGLES, 0, cubeModel->vertexCount);
+
+	aquariumModel->render(scene->aquarium, nullptr, shader, false);
+	
+	fishesModel->render(shader, scene->aquarium->fishTransformations.data());
+	
 
 	// render imgui
 	guiModel->render();

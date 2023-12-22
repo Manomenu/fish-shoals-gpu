@@ -1,29 +1,29 @@
 #include "scene.h"
 
-Scene::Scene() {
+Scene::Scene(int numberOfFishes) {
 
 	PlayerCreateInfo playerInfo;
 	playerInfo.eulers = { 0.0f, 90.0f,0.0f };
 	playerInfo.position = { 0.0f, 0.0f, 1.0f };
 	player = new Player(&playerInfo);
 
-	CubeCreateInfo cubeInfo;
-	cubeInfo.eulers = { 0.0f, 0.0f, 0.0f };
-	cubeInfo.position = { 0.0f, 0.0f, 0.5f };
-	cube = new Cube(&cubeInfo);
+	CreateAquariumInfo aquariumInfo;
+	aquariumInfo.position = { 0.0f, 0.0f, 0.0f };
+	aquariumInfo.size = { AQUARIUM_SIZE };
+	aquariumInfo.numberOfFishes = numberOfFishes;
+	aquarium = new Aquarium(&aquariumInfo);
 
 	gui = new Gui();
 }
 
 Scene::~Scene() {
-	delete cube;
+	delete aquarium;
 	delete player;
 }
 
 void Scene::update(float rate) {
 	gui->update();
 	player->update();
-	cube->update(1.0f);
 }
 
 void Scene::movePlayer(glm::vec3 dPos) {

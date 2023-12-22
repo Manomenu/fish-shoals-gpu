@@ -8,7 +8,7 @@ RectangleModel::RectangleModel(RectangleModelCreateInfo* createInfo) {
 
 	//Make Cube
 	//x,y,z,s,t
-	std::vector<float> vertices = { {
+	vertices = { {
 		-l, -w, -h, 0.0f, 0.0f, // bottom
 		 l, -w, -h, 1.0f, 0.0f,
 		 l,  w, -h, 1.0f, 1.0f,
@@ -73,4 +73,23 @@ RectangleModel::RectangleModel(RectangleModelCreateInfo* createInfo) {
 RectangleModel::~RectangleModel() {
 	glDeleteBuffers(1, &VBO);
 	glDeleteVertexArrays(1, &VAO);
+}
+
+void RectangleModel::render(Cube* cube, Material* material, Shader* shader, bool shouldFill)
+{
+	glm::mat4 model_transform{ glm::mat4(1.0f) };
+	model_transform = glm::translate(model_transform, cube->position);
+	shader->setMat4("model", model_transform);
+
+	shader->use();
+
+	if (material != nullptr)
+		material->use();
+
+	glBindVertexArray(VAO);
+	if (!shouldFill)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	if (!shouldFill)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

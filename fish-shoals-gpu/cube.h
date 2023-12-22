@@ -2,13 +2,19 @@
 #include "config.cuh"
 
 struct CubeCreateInfo {
-	glm::vec3 position, eulers;
+	glm::vec3 position;
+	glm::vec3 size;
 };
 
-class Cube {
+class Cube 
+{
 public:
-	glm::vec3 position, eulers;
+	glm::vec3 position;
+	glm::vec3 size;
+
 	Cube(CubeCreateInfo* createInfo);
-	void update(float rate);
+
+protected:
+	Cube();
 };
 

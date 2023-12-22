@@ -5,6 +5,7 @@ bool App::windowSizeChanged = false;
 App::App(AppCreateInfo* createInfo) {
 	this->width = createInfo->width;
 	this->height = createInfo->height;
+	this->numberOfFishes = createInfo->numberOfFishes;
 
 	lastTime = glfwGetTime();
 	numFrames = 0;
@@ -14,8 +15,8 @@ App::App(AppCreateInfo* createInfo) {
 	
 	setUpImgui();
 
-	renderer = new Engine(width, height);
-	scene = new Scene();
+	renderer = new Engine(width, height, numberOfFishes);
+	scene = new Scene(numberOfFishes);
 }
 
 void App::setUpImgui()

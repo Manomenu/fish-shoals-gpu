@@ -6,6 +6,7 @@
 struct AppCreateInfo {
 	int width;
 	int height;
+	int numberOfFishes;
 };
 
 enum class returnCode {
@@ -26,6 +27,7 @@ private:
 
 	GLFWwindow* window;
 	int width, height;
+	int numberOfFishes;
 	Scene* scene;
 	Engine* renderer;
 

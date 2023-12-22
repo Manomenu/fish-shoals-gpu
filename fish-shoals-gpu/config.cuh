@@ -18,15 +18,19 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <algorithm>
+#include <execution>
+#include <random>
 
 #pragma endregion
 
 #pragma region Configuration_constants
 
-const float FAR = 30.0f;
+const float FAR = 300.0f;
 const float NEAR = 0.1f;
 const float FOVY = 45.0f;
 #define BACKGROUND_COLOR 0.5f, 0.1f, 0.3f, 1.0f
+#define AQUARIUM_SIZE 50.0f, 50.0f, 50.0f
 
 #pragma endregion
 

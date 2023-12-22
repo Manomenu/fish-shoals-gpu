@@ -11,14 +11,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <CudaCompile Include="fishes_model.cu" />
     <CudaCompile Include="main_program.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.h" />
+    <ClInclude Include="aquarium.cuh" />
     <ClInclude Include="config.cuh" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="cuda_utils.cuh" />
     <ClInclude Include="engine.h" />
+    <ClInclude Include="fishes_model.cuh" />
+    <ClInclude Include="fish_physics.h" />
+    <ClInclude Include="fish_transformation.h" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="gui_model.h" />
     <ClInclude Include="image.h" />
@@ -34,6 +39,7 @@
     <ClInclude Include="imstb_truetype.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="pyramid_model.h" />
     <ClInclude Include="rectangle_model.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="shader.h" />
@@ -41,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="app.cpp" />
+    <ClCompile Include="aquarium.cu" />
     <ClCompile Include="cube.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="glad.c" />
@@ -57,6 +64,7 @@
     <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="pyramid_model.cpp" />
     <ClCompile Include="rectangle_model.cpp" />
     <ClCompile Include="scene.cpp" />
   </ItemGroup>
@@ -68,6 +76,8 @@
     <Natvis Include="imgui.natvis" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="fishesFragment.txt" />
+    <Text Include="fishesVertex.txt" />
     <Text Include="fragment.txt" />
     <Text Include="vertex.txt" />
   </ItemGroup>

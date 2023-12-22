@@ -5,10 +5,11 @@
 #include "rectangle_model.h"
 #include "gui_model.h"
 #include "material.h"
+#include "fishes_model.cuh"
 
 class Engine {
 public:
-	Engine(int width, int height);
+	Engine(int width, int height, int numberOfFishes);
 	~Engine();
 
 	void createMaterials();
@@ -16,9 +17,9 @@ public:
 	void render(Scene* scene);
 
 	Shader* shader;
-	Material* woodMaterial;
-	RectangleModel* cubeModel;
+	RectangleModel* aquariumModel;
 	GuiModel* guiModel;
-	int width, height;
+	FishesModel* fishesModel;
+	int width, height, numberOfFishes;
 };
 

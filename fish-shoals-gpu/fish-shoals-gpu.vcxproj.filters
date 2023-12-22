@@ -2,6 +2,9 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <CudaCompile Include="main_program.cu" />
+    <CudaCompile Include="fishes_model.cu">
+      <Filter>view</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui_demo.cpp">
@@ -60,6 +63,12 @@
     </ClCompile>
     <ClCompile Include="gui.cpp">
       <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="aquarium.cu">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="pyramid_model.cpp">
+      <Filter>view</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +142,21 @@
     <ClInclude Include="gui.h">
       <Filter>model</Filter>
     </ClInclude>
+    <ClInclude Include="aquarium.cuh">
+      <Filter>model</Filter>
+    </ClInclude>
+    <ClInclude Include="fish_transformation.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="fish_physics.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="fishes_model.cuh">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="pyramid_model.h">
+      <Filter>view</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.natstepfilter">
@@ -164,6 +188,9 @@
     <Filter Include="textures">
       <UniqueIdentifier>{01e35c95-6ec8-4c13-a1b4-63fedf7628ec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="component">
+      <UniqueIdentifier>{8345d5c6-37b1-472c-9456-e4edafe7ccb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="imgui.natvis">
@@ -175,6 +202,12 @@
       <Filter>shaders</Filter>
     </Text>
     <Text Include="fragment.txt">
+      <Filter>shaders</Filter>
+    </Text>
+    <Text Include="fishesVertex.txt">
+      <Filter>shaders</Filter>
+    </Text>
+    <Text Include="fishesFragment.txt">
       <Filter>shaders</Filter>
     </Text>
   </ItemGroup>
