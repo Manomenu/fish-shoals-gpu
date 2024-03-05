@@ -24,6 +24,7 @@ Scene::~Scene() {
 void Scene::update(float rate) {
 	gui->update();
 	player->update();
+	aquarium->update();
 }
 
 void Scene::movePlayer(glm::vec3 dPos) {

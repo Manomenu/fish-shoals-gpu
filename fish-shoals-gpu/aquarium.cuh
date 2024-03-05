@@ -15,10 +15,15 @@ class Aquarium : public Cube
 {
 public:
 	int numberOfFishes;
-	std::vector<FishTransformation> fishTransformations;
-	std::vector<FishPhysics> fishPhysics;
+	std::vector<float> fishTransformations;
+	std::vector<float> fishPhysics;
+
+	// accessible on device only below
+	float* dev_fishTransformations;
+	float* dev_fishPhysics;
 
 	Aquarium(CreateAquariumInfo* createInfo);
+	~Aquarium();
 	void update();
 	void setDefaultFishData();
 };

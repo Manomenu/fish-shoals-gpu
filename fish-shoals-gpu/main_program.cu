@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
 
 	if (argc == 4) {
 		// Three arguments provided, set number of fishes, width and height
-		numberOfFishes = atoi(argv[1]);
+		numberOfFishes = atoi(argv[1]); // in thousands
 		width = atoi(argv[2]);
 		height = atoi(argv[3]);
 	}
@@ -33,6 +33,9 @@ int main(int argc, char* argv[]) {
 	appInfo.height = height;
 	appInfo.numberOfFishes = numberOfFishes;
 	App* app = new App(&appInfo);
+
+	validateCudaStatus(cudaDeviceReset());
+	validateCudaStatus(cudaSetDevice(0));
 
 	returnCode nextAction = returnCode::CONTINUE;
 	while (nextAction == returnCode::CONTINUE) {

@@ -75,13 +75,17 @@ RectangleModel::~RectangleModel() {
 	glDeleteVertexArrays(1, &VAO);
 }
 
-void RectangleModel::render(Cube* cube, Material* material, Shader* shader, bool shouldFill)
+void RectangleModel::render(Cube* cube, Material* material, Shader* shader, bool shouldFill, 
+	const glm::mat4& view, const glm::mat4& projection)
 {
 	glm::mat4 model_transform{ glm::mat4(1.0f) };
 	model_transform = glm::translate(model_transform, cube->position);
-	shader->setMat4("model", model_transform);
 
 	shader->use();
+	shader->setMat4("model", model_transform);
+	shader->setMat4("view", view);
+	shader->setMat4("projection", projection);
+	
 
 	if (material != nullptr)
 		material->use();

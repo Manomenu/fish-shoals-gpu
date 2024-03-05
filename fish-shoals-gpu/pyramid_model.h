@@ -9,7 +9,7 @@ struct PyramidModelCreateInfo {
 class PyramidModel {
 public:
 	unsigned int /*VBO, VAO,*/ vertexCount;
-	std::vector<float> vertices;
+	float vertices[15];
 
 	PyramidModel(PyramidModelCreateInfo* createInfo);
 	~PyramidModel();

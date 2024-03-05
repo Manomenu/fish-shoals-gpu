@@ -14,12 +14,12 @@ public:
 
 	void createMaterials();
 	void createModels();
-	void render(Scene* scene);
+	void render(Scene *scene);
 
-	Shader* shader;
-	RectangleModel* aquariumModel;
-	GuiModel* guiModel;
-	FishesModel* fishesModel;
+	Shader *shader, *fishesShader;
+	RectangleModel *aquariumModel;
+	GuiModel *guiModel;
+	FishesModel *fishesModel;
 	int width, height, numberOfFishes;
 };
 

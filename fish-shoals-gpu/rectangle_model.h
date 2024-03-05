@@ -15,6 +15,7 @@ public:
 
 	RectangleModel(RectangleModelCreateInfo* createInfo);
 	~RectangleModel();
-	void render(Cube* cube, Material* material, Shader* shader, bool shouldFill);
+	void render(Cube* cube, Material* material, Shader* shader, bool shouldFill, 
+		const glm::mat4& view, const glm::mat4& projection);
 };
 
