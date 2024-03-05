@@ -21,5 +21,6 @@ public:
 	GuiModel *guiModel;
 	FishesModel *fishesModel;
 	int width, height, numberOfFishes;
+	
 };
 

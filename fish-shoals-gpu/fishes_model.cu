@@ -74,7 +74,10 @@ FishesModel::FishesModel(FishesModelCreateInfo* createInfo)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), indices.data(), GL_STATIC_DRAW);
 
 	validateCudaStatus(cudaGraphicsGLRegisterBuffer(&resource_vbo, VBO, 0));
-	
+	validateCudaStatus(cudaGraphicsMapResources(1, &resource_vbo));
+	validateCudaStatus(cudaGraphicsResourceGetMappedPointer((void**)&dev_vbo_data, &vbo_size, resource_vbo));
+
+	validateCudaStatus(cudaMalloc((void**)&dev_fishes_positions, sizeof(float) * numberOfFishes * 3));
 }
 
 FishesModel::~FishesModel()
@@ -82,7 +85,7 @@ FishesModel::~FishesModel()
 	glDeleteBuffers(1, &EBO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteVertexArrays(1, &VAO);
-	
+	validateCudaStatus(cudaGraphicsUnmapResources(1, &resource_vbo));
 }
 
 __global__ void setFishesVertices(float3* dev_vbo_data, float* fishPositions, float* fishDirections, 
@@ -202,21 +205,21 @@ __global__ void setFishesVertices(float3* dev_vbo_data, float* fishPositions, fl
 	dev_vbo_data[15 * tid + 14] = *(fishModel->vertices + 14) + fishPositions[tid].position.z;*/
 }
 
-void FishesModel::render(Shader* shader, float* dev_fishes_positions, float* dev_fishes_directions, 
+void FishesModel::render(Shader* shader, float* fishes_positions, float* dev_fishes_directions, 
 	const glm::mat4& view, const glm::mat4& projection)
 {
-
-	validateCudaStatus(cudaGraphicsMapResources(1, &resource_vbo));
-	validateCudaStatus(cudaGraphicsResourceGetMappedPointer((void**)&dev_vbo_data, &vbo_size, resource_vbo));
+	
 
 	// compute model matrix for each matrix, then multiply fishModel with each of those matrices and store in vertices
-	//validateCudaStatus(cudaMemcpy(dev_fishes_positions, &fishes->position, sizeof(glm::vec3) * numberOfFishes, cudaMemcpyHostToDevice));
+	validateCudaStatus(cudaMemcpy(dev_fishes_positions, fishes_positions, 3 * numberOfFishes * sizeof(float), cudaMemcpyHostToDevice));
+
+
 	setFishesVertices<<<numberOfBlocks, 1000>>>(dev_vbo_data, dev_fishes_positions, dev_fishes_directions, dev_fish_model);
 	
 	validateCudaStatus(cudaGetLastError());
 	validateCudaStatus(cudaDeviceSynchronize());
 
-	validateCudaStatus(cudaGraphicsUnmapResources(1, &resource_vbo));
+	
 	
 
 	shader->use();

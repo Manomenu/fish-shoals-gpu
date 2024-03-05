@@ -47,4 +47,5 @@ private:
 	float3* dev_vbo_data; 
 	// float* dev_fishes_positions;
 	float* dev_fish_model;
+	float* dev_fishes_positions;
 };
