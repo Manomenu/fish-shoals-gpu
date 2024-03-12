@@ -37,7 +37,7 @@ GLFWwindow* App::makeWindow() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	GLFWwindow* window = glfwCreateWindow(width, height, "Fish shoal", NULL, NULL);
-
+	
 	glfwMakeContextCurrent(window);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -196,6 +196,7 @@ App::~App() {
 	//free memory
 	delete scene;
 	delete renderer;
+	glfwDestroyWindow(window);
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();

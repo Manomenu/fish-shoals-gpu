@@ -40,12 +40,10 @@ private:
 		-a, -h, -a, //3
 		0.0, h, 0.0 //4
 	};
-	cudaGraphicsResource* resource_vbo;
-	size_t vbo_size;
+	struct cudaGraphicsResource* resource_vbo;
 
 	// accessible on a gpu only
 	float3* dev_vbo_data; 
 	// float* dev_fishes_positions;
 	float* dev_fish_model;
-	float* dev_fishes_positions;
 };

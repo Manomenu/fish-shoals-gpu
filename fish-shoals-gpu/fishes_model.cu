@@ -66,18 +66,26 @@ FishesModel::FishesModel(FishesModelCreateInfo* createInfo)
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float), vertices.data(), GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float), 0, GL_DYNAMIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), indices.data(), GL_STATIC_DRAW);
 
+	//validateCudaStatus(cudaMalloc(
+	//	(void**)&dev_fishes_positions,
+	//	sizeof(float) * numberOfFishes * 3
+	//));
+
 	validateCudaStatus(cudaGraphicsGLRegisterBuffer(&resource_vbo, VBO, 0));
 	validateCudaStatus(cudaGraphicsMapResources(1, &resource_vbo));
-	validateCudaStatus(cudaGraphicsResourceGetMappedPointer((void**)&dev_vbo_data, &vbo_size, resource_vbo));
+	validateCudaStatus(cudaGraphicsResourceGetMappedPointer((void**)&dev_vbo_data, 0, resource_vbo));
 
-	validateCudaStatus(cudaMalloc((void**)&dev_fishes_positions, sizeof(float) * numberOfFishes * 3));
+	
+	//validateCudaStatus(cudaMalloc((void**)&dev_fishes_positions, sizeof(float) * numberOfFishes * 3));
+
+	
 }
 
 FishesModel::~FishesModel()
@@ -86,20 +94,20 @@ FishesModel::~FishesModel()
 	glDeleteBuffers(1, &VBO);
 	glDeleteVertexArrays(1, &VAO);
 	validateCudaStatus(cudaGraphicsUnmapResources(1, &resource_vbo));
+	validateCudaStatus(cudaGraphicsUnregisterResource(resource_vbo));
 }
 
-__global__ void setFishesVertices(float3* dev_vbo_data, float* fishPositions, float* fishDirections, 
+__global__ void setFishesVertices(float3* dev_vbo_data, float* fishPositions, 
 	float* fishModel)
 {
-	float xd = fishPositions[0];
-	fishPositions[0] = -33;
-	xd = fishPositions[0];
-	float xdd = fishDirections[0];
-	int tid = threadIdx.x + blockDim.x * blockIdx.x;
+	int x = threadIdx.x;
+	//float xd = fishPositions[0];
+	//fishPositions[0] = -33;
+	//xd = fishPositions[0];
+	//float xdd = fishDirections[0];
+	//int tid = threadIdx.x + blockDim.x * blockIdx.x;
 	dev_vbo_data[0].x = 2;
 	
-	int size = sizeof(dev_vbo_data) / sizeof(float3);
-	int size2 = sizeof(fishPositions) / sizeof(float);
 		/*dev_vbo_data[15 * tid + 1] = 2;
 		dev_vbo_data[15 * tid + 2] = 2;
 
@@ -205,16 +213,14 @@ __global__ void setFishesVertices(float3* dev_vbo_data, float* fishPositions, fl
 	dev_vbo_data[15 * tid + 14] = *(fishModel->vertices + 14) + fishPositions[tid].position.z;*/
 }
 
-void FishesModel::render(Shader* shader, float* fishes_positions, float* dev_fishes_directions, 
+void FishesModel::render(Shader* shader, float* dev_fishes_positions, float* dev_fishes_directions, 
 	const glm::mat4& view, const glm::mat4& projection)
 {
-	
-
 	// compute model matrix for each matrix, then multiply fishModel with each of those matrices and store in vertices
-	validateCudaStatus(cudaMemcpy(dev_fishes_positions, fishes_positions, 3 * numberOfFishes * sizeof(float), cudaMemcpyHostToDevice));
+	//validateCudaStatus(cudaMemcpy(dev_fishes_positions, fishes_positions, 3 * numberOfFishes * sizeof(float), cudaMemcpyHostToDevice));
 
 
-	setFishesVertices<<<numberOfBlocks, 1000>>>(dev_vbo_data, dev_fishes_positions, dev_fishes_directions, dev_fish_model);
+	setFishesVertices<<<numberOfBlocks, 1000>>>(dev_vbo_data, dev_fishes_positions, dev_fish_model);
 	
 	validateCudaStatus(cudaGetLastError());
 	validateCudaStatus(cudaDeviceSynchronize());

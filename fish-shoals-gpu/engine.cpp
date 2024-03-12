@@ -29,6 +29,8 @@ Engine::~Engine() {
 	delete aquariumModel;
 	delete shader;
 	delete fishesShader;
+	delete guiModel;
+	delete fishesModel;
 }
 
 void Engine::createModels() {
@@ -66,8 +68,8 @@ void Engine::render(Scene* scene)
 
 	aquariumModel->render(scene->aquarium, nullptr, shader, false, view_transform, projection_transform);
 
-	fishesModel->render(fishesShader, &(scene->aquarium->fishTransformations[0]),
-		&(scene->aquarium->fishPhysics[0]), view_transform, projection_transform);
+	fishesModel->render(fishesShader, scene->aquarium->dev_fishTransformations,
+		scene->aquarium->dev_fishPhysics, view_transform, projection_transform);
 
 	// render imgui
 	guiModel->render();

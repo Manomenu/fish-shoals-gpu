@@ -13,8 +13,8 @@ Aquarium::Aquarium(CreateAquariumInfo* createInfo)
 
 Aquarium::~Aquarium()
 {
-	cudaFree(dev_fishPhysics);
-	cudaFree(dev_fishTransformations);
+	validateCudaStatus(cudaFree(dev_fishPhysics));
+	validateCudaStatus(cudaFree(dev_fishTransformations));
 }
 
 void Aquarium::update()
@@ -60,26 +60,28 @@ void Aquarium::setDefaultFishData()
 		}
 	);
 
-	//validateCudaStatus(cudaMalloc(
-	//	(void**)&dev_fishPhysics, 
-	//	sizeof(float) * numberOfFishes * 3
-	//));
-	//validateCudaStatus(cudaMalloc(
-	//	(void**)&dev_fishTransformations,
-	//	sizeof(float) * numberOfFishes * 3
-	//));
+	validateCudaStatus(cudaMalloc(
+		(void**)&dev_fishPhysics, 
+		sizeof(float) * numberOfFishes * 3
+	));
 
-	//validateCudaStatus(cudaMemcpy(
-	//	dev_fishPhysics,
-	//	fishPhysics.data(),
-	//	sizeof(float) * numberOfFishes * 3,
-	//	cudaMemcpyHostToDevice
-	//));
-	//validateCudaStatus(cudaMemcpy(
-	//	dev_fishTransformations,
-	//	fishTransformations.data(),
-	//	sizeof(float) * numberOfFishes * 3,
-	//	cudaMemcpyHostToDevice
-	//));
+	validateCudaStatus(cudaMemcpy(
+		dev_fishPhysics,
+		fishPhysics.data(),
+		sizeof(float) * numberOfFishes * 3,
+		cudaMemcpyHostToDevice
+	));
+
+	validateCudaStatus(cudaMalloc(
+		(void**)&dev_fishTransformations,
+		sizeof(float) * numberOfFishes * 3
+	));
+
+	validateCudaStatus(cudaMemcpy(
+		dev_fishTransformations,
+		fishTransformations.data(),
+		sizeof(float) * numberOfFishes * 3,
+		cudaMemcpyHostToDevice
+	));
 }
 

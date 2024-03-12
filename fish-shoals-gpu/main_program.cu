@@ -41,6 +41,7 @@ int main(int argc, char* argv[]) {
 	while (nextAction == returnCode::CONTINUE) {
 		nextAction = app->mainLoop();
 	}
+	cudaDeviceReset();
 
 	delete app;
 
