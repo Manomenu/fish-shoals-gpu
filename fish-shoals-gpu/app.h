@@ -1,7 +1,6 @@
 #pragma once
 #include "config.cuh"
-#include "scene.h"
-#include "engine.h"
+#include "engine.cuh"
 
 struct AppCreateInfo {
 	int width;
@@ -34,6 +33,7 @@ private:
 	double lastTime, currentTime;
 	int numFrames;
 	float frameTime;
+	int fps;
 
 #pragma region Callbacks
 	static void framebufferSizeCallback(GLFWwindow*, int, int);

@@ -1,4 +1,4 @@
-#include "engine.h"
+#include "engine.cuh"
 
 Engine::Engine(int width, int height, int numberOfFishes) {
 
@@ -68,8 +68,7 @@ void Engine::render(Scene* scene)
 
 	aquariumModel->render(scene->aquarium, nullptr, shader, false, view_transform, projection_transform);
 
-	fishesModel->render(fishesShader, scene->aquarium->dev_fishTransformations,
-		scene->aquarium->dev_fishPhysics, view_transform, projection_transform);
+	fishesModel->render(fishesShader, scene->aquarium->fishes, view_transform, projection_transform);
 
 	// render imgui
 	guiModel->render();

@@ -1,4 +1,4 @@
-#include "scene.h"
+#include "scene.cuh"
 
 Scene::Scene(int numberOfFishes) {
 
@@ -13,7 +13,7 @@ Scene::Scene(int numberOfFishes) {
 	aquariumInfo.numberOfFishes = numberOfFishes;
 	aquarium = new Aquarium(&aquariumInfo);
 
-	gui = new Gui();
+	gui = new Gui(aquarium->fishes);
 }
 
 Scene::~Scene() {
@@ -22,7 +22,7 @@ Scene::~Scene() {
 }
 
 void Scene::update(float rate) {
-	gui->update();
+	gui->update(rate);
 	player->update();
 	aquarium->update();
 }

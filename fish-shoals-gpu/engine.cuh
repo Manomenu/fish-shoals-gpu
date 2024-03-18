@@ -1,6 +1,6 @@
 #pragma once
 #include "config.cuh"
-#include "scene.h"
+#include "scene.cuh"
 #include "shader.h"
 #include "rectangle_model.h"
 #include "gui_model.h"
@@ -14,13 +14,13 @@ public:
 
 	void createMaterials();
 	void createModels();
-	void render(Scene *scene);
+	void render(Scene* scene);
 
-	Shader *shader, *fishesShader;
-	RectangleModel *aquariumModel;
-	GuiModel *guiModel;
-	FishesModel *fishesModel;
+	Shader* shader, * fishesShader;
+	RectangleModel* aquariumModel;
+	GuiModel* guiModel;
+	FishesModel* fishesModel;
 	int width, height, numberOfFishes;
-	
+
 };
 

@@ -11,8 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <CudaCompile Include="engine.cu" />
+    <CudaCompile Include="fishes.cu" />
     <CudaCompile Include="fishes_model.cu" />
+    <CudaCompile Include="fish_model.cu" />
     <CudaCompile Include="main_program.cu" />
+    <CudaCompile Include="scene.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.h" />
@@ -20,10 +24,10 @@
     <ClInclude Include="config.cuh" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="cuda_utils.cuh" />
-    <ClInclude Include="engine.h" />
+    <ClInclude Include="engine.cuh" />
+    <ClInclude Include="fishes.cuh" />
     <ClInclude Include="fishes_model.cuh" />
-    <ClInclude Include="fish_physics.h" />
-    <ClInclude Include="fish_transformation.h" />
+    <ClInclude Include="fish_model.cuh" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="gui_model.h" />
     <ClInclude Include="image.h" />
@@ -41,7 +45,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="pyramid_model.h" />
     <ClInclude Include="rectangle_model.h" />
-    <ClInclude Include="scene.h" />
+    <ClInclude Include="scene.cuh" />
     <ClInclude Include="shader.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
@@ -49,7 +53,6 @@
     <ClCompile Include="app.cpp" />
     <ClCompile Include="aquarium.cu" />
     <ClCompile Include="cube.cpp" />
-    <ClCompile Include="engine.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="gui_model.cpp" />
@@ -66,7 +69,6 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="pyramid_model.cpp" />
     <ClCompile Include="rectangle_model.cpp" />
-    <ClCompile Include="scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />

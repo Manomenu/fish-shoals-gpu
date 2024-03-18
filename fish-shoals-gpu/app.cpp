@@ -168,14 +168,15 @@ returnCode App::mainLoop() {
 	glfwPollEvents();
 
 	//update
+	calculateFrameRate();
 	updateWindowSize();
-	scene->update(frameTime / 16.0f);
+	scene->update(fps);
 
 	//draw
 	renderer->render(scene);
 	glfwSwapBuffers(window);
 
-	calculateFrameRate();
+	
 
 	return nextAction;
 }
@@ -215,6 +216,7 @@ void App::calculateFrameRate() {
 		lastTime = currentTime;
 		numFrames = -1;
 		frameTime = float(1000.0 / framerate);
+		this->fps = framerate;
 	}
 
 	++numFrames;

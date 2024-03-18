@@ -30,11 +30,19 @@ const float FAR = 300.0f;
 const float NEAR = 0.1f;
 const float FOVY = 45.0f;
 #define BACKGROUND_COLOR 0.5f, 0.1f, 0.3f, 1.0f
-#define AQUARIUM_SIZE 50.0f, 50.0f, 50.0f
+#define AQUARIUM_SIZE 10.0f, 10.0f, 10.0f
+#define FISH_RENDER_H 0.5f
+#define FISH_RENDER_A 0.2f
+#define FISH_COUNT 10000
 
 #pragma endregion
 
 #pragma region Data_types_definitions
+
+struct cudaSOA {
+	float3* dev_positions;
+	float3* dev_velocities;
+};
 
 struct image {
 	unsigned char* pixels;
@@ -42,6 +50,7 @@ struct image {
 };
 
 #pragma endregion
+
 
 
 

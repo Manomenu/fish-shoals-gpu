@@ -1,9 +1,7 @@
 #pragma once
 #include "config.cuh"
 #include "cube.h"
-#include "fish_transformation.h"
-#include "fish_physics.h"
-#include "device_launch_parameters.h"
+#include "fishes.cuh"
 
 struct CreateAquariumInfo {
 	int numberOfFishes;
@@ -15,16 +13,10 @@ class Aquarium : public Cube
 {
 public:
 	int numberOfFishes;
-	std::vector<float> fishTransformations;
-	std::vector<float> fishPhysics;
-
-	// accessible on device only below
-	float* dev_fishTransformations;
-	float* dev_fishPhysics;
+	Fishes* fishes;	
 
 	Aquarium(CreateAquariumInfo* createInfo);
 	~Aquarium();
 	void update();
-	void setDefaultFishData();
 };
 

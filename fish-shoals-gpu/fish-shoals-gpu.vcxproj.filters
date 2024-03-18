@@ -3,7 +3,19 @@
   <ItemGroup>
     <CudaCompile Include="main_program.cu" />
     <CudaCompile Include="fishes_model.cu">
-      <Filter>view</Filter>
+      <Filter>view\fishes_model</Filter>
+    </CudaCompile>
+    <CudaCompile Include="engine.cu">
+      <Filter>view\engine</Filter>
+    </CudaCompile>
+    <CudaCompile Include="fishes.cu">
+      <Filter>model\fishes</Filter>
+    </CudaCompile>
+    <CudaCompile Include="scene.cu">
+      <Filter>model\scene</Filter>
+    </CudaCompile>
+    <CudaCompile Include="fish_model.cu">
+      <Filter>view\fish_model</Filter>
     </CudaCompile>
   </ItemGroup>
   <ItemGroup>
@@ -37,38 +49,32 @@
     <ClCompile Include="glad.c">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="scene.cpp">
-      <Filter>model</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>model</Filter>
-    </ClCompile>
-    <ClCompile Include="engine.cpp">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="cube.cpp">
-      <Filter>model</Filter>
+    <ClCompile Include="gui_model.cpp">
+      <Filter>view\gui_model</Filter>
     </ClCompile>
     <ClCompile Include="image.cpp">
-      <Filter>view</Filter>
+      <Filter>view\image</Filter>
     </ClCompile>
     <ClCompile Include="material.cpp">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="rectangle_model.cpp">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="gui_model.cpp">
-      <Filter>view</Filter>
-    </ClCompile>
-    <ClCompile Include="gui.cpp">
-      <Filter>model</Filter>
-    </ClCompile>
-    <ClCompile Include="aquarium.cu">
-      <Filter>model</Filter>
+      <Filter>view\material</Filter>
     </ClCompile>
     <ClCompile Include="pyramid_model.cpp">
-      <Filter>view</Filter>
+      <Filter>view\pyramid_model</Filter>
+    </ClCompile>
+    <ClCompile Include="rectangle_model.cpp">
+      <Filter>view\rectangle_model</Filter>
+    </ClCompile>
+    <ClCompile Include="aquarium.cu">
+      <Filter>model\aquarium</Filter>
+    </ClCompile>
+    <ClCompile Include="cube.cpp">
+      <Filter>model\cube</Filter>
+    </ClCompile>
+    <ClCompile Include="gui.cpp">
+      <Filter>model\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>model\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,50 +118,50 @@
     <ClInclude Include="stb_image.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="scene.h">
-      <Filter>model</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>model</Filter>
-    </ClInclude>
-    <ClInclude Include="engine.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="cube.h">
-      <Filter>model</Filter>
-    </ClInclude>
-    <ClInclude Include="image.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="material.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="rectangle_model.h">
-      <Filter>view</Filter>
-    </ClInclude>
     <ClInclude Include="shader.h">
       <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="gui_model.h">
-      <Filter>view</Filter>
-    </ClInclude>
-    <ClInclude Include="gui.h">
-      <Filter>model</Filter>
-    </ClInclude>
-    <ClInclude Include="aquarium.cuh">
-      <Filter>model</Filter>
-    </ClInclude>
-    <ClInclude Include="fish_transformation.h">
-      <Filter>component</Filter>
-    </ClInclude>
-    <ClInclude Include="fish_physics.h">
-      <Filter>component</Filter>
+      <Filter>view\gui_model</Filter>
     </ClInclude>
     <ClInclude Include="fishes_model.cuh">
-      <Filter>view</Filter>
+      <Filter>view\fishes_model</Filter>
+    </ClInclude>
+    <ClInclude Include="image.h">
+      <Filter>view\image</Filter>
+    </ClInclude>
+    <ClInclude Include="material.h">
+      <Filter>view\material</Filter>
     </ClInclude>
     <ClInclude Include="pyramid_model.h">
-      <Filter>view</Filter>
+      <Filter>view\pyramid_model</Filter>
+    </ClInclude>
+    <ClInclude Include="rectangle_model.h">
+      <Filter>view\rectangle_model</Filter>
+    </ClInclude>
+    <ClInclude Include="engine.cuh">
+      <Filter>view\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="fishes.cuh">
+      <Filter>model\fishes</Filter>
+    </ClInclude>
+    <ClInclude Include="aquarium.cuh">
+      <Filter>model\aquarium</Filter>
+    </ClInclude>
+    <ClInclude Include="cube.h">
+      <Filter>model\cube</Filter>
+    </ClInclude>
+    <ClInclude Include="gui.h">
+      <Filter>model\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>model\player</Filter>
+    </ClInclude>
+    <ClInclude Include="scene.cuh">
+      <Filter>model\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="fish_model.cuh">
+      <Filter>view\fish_model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -188,8 +194,50 @@
     <Filter Include="textures">
       <UniqueIdentifier>{01e35c95-6ec8-4c13-a1b4-63fedf7628ec}</UniqueIdentifier>
     </Filter>
-    <Filter Include="component">
-      <UniqueIdentifier>{8345d5c6-37b1-472c-9456-e4edafe7ccb1}</UniqueIdentifier>
+    <Filter Include="view\engine">
+      <UniqueIdentifier>{5f8ba3a0-7004-404b-8565-f1c413537d14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view\gui_model">
+      <UniqueIdentifier>{6626408d-e782-4587-82b4-f1274bff45aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view\fishes_model">
+      <UniqueIdentifier>{f3913b9f-bac0-49b0-8170-ae35371ea5b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view\image">
+      <UniqueIdentifier>{f1c86c48-3719-4da1-8ea7-6a71351a66a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view\material">
+      <UniqueIdentifier>{9b37ab8b-0ef2-43df-88d9-37ab85cead74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view\pyramid_model">
+      <UniqueIdentifier>{2a59a5d4-ee2a-4a64-a168-9e853880e271}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view\rectangle_model">
+      <UniqueIdentifier>{e885c432-bb05-4e0c-8625-8228326b3657}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="control\app">
+      <UniqueIdentifier>{d9484639-1070-44b7-87e9-c3b3cd137a10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="model\fishes">
+      <UniqueIdentifier>{d077dbcf-78a2-4dc6-9710-8befe5f0b5e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="model\aquarium">
+      <UniqueIdentifier>{a76295d6-bf58-44e3-a4bc-49e35d65e5b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="model\cube">
+      <UniqueIdentifier>{62bc17ff-0b75-4e22-b78e-063cc3ef7007}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="model\gui">
+      <UniqueIdentifier>{94c9184c-e727-4b70-aad7-bb4486986bf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="model\player">
+      <UniqueIdentifier>{c27de564-f94a-4a36-9394-8f14f7b27320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="model\scene">
+      <UniqueIdentifier>{f1068b12-84ba-4579-ade8-246561483c2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view\fish_model">
+      <UniqueIdentifier>{e4de1ef4-2976-4387-a614-21791f6a9bce}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
