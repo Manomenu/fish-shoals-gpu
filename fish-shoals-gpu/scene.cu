@@ -21,8 +21,8 @@ Scene::~Scene() {
 	delete player;
 }
 
-void Scene::update(float rate) {
-	gui->update(rate);
+void Scene::update(float fps) {
+	gui->update(fps);
 	player->update();
 	aquarium->update();
 }

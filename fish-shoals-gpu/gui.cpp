@@ -5,7 +5,7 @@ Gui::Gui(Fishes* fishes)
     memcpy(&simulationParams, &fishes->params, sizeof(simulationParams));
 }
 
-void Gui::update(int fps)
+void Gui::update(float fps)
 {
     this->fps = fps;
 
@@ -15,7 +15,7 @@ void Gui::update(int fps)
 
     ImGui::Begin("Control Panel", &show_window);
 
-    
+    ImGui::SeparatorText("Press CTRL to release mouse pointer");
 
     if (ImGui::CollapsingHeader("Simulation parameteres"))
     {
@@ -36,6 +36,15 @@ void Gui::update(int fps)
     if (ImGui::CollapsingHeader("Simulation information"))
     {
         ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d fps", fps);
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d fishes", FISH_COUNT);
+    }
+
+    if (ImGui::CollapsingHeader("Control information"))
+    {
+        ImGui::BulletText("W - move camera forward");
+        ImGui::BulletText("A - move camera left");
+        ImGui::BulletText("S - move camera right");
+        ImGui::BulletText("D - move camera back");
     }
 
 

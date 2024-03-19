@@ -8,10 +8,10 @@ class Gui
 {
 public:
 	bool show_window = true;
-	int fps = 0;
+	float fps = 0;
 	simulationParams simulationParams;
 
-	void update(int fps);
+	void update(float fps);
 
 	Gui(Fishes* fishes);
 };

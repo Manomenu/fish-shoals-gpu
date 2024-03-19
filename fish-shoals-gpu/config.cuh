@@ -21,6 +21,8 @@
 #include <algorithm>
 #include <execution>
 #include <random>
+#include <thrust/sort.h>
+#include <thrust/execution_policy.h>
 
 #pragma endregion
 
@@ -30,18 +32,28 @@ const float FAR = 300.0f;
 const float NEAR = 0.1f;
 const float FOVY = 45.0f;
 #define BACKGROUND_COLOR 0.5f, 0.1f, 0.3f, 1.0f
-#define AQUARIUM_SIZE 10.0f, 10.0f, 10.0f
+#define AQUARIUM_LEN 10.0f
+#define AQUARIUM_SIZE AQUARIUM_LEN, AQUARIUM_LEN, AQUARIUM_LEN
 #define FISH_RENDER_H 0.5f
 #define FISH_RENDER_A 0.2f
-#define FISH_COUNT 10000
+#define FISH_COUNT 10000 // >= 1024
+#define MAX_THREADS 1024
 
 #pragma endregion
 
 #pragma region Data_types_definitions
 
+struct fishesGrid {
+	int* cells;
+	int* fishesIDs;
+	int* starts;
+	int* ends;
+};
+
 struct cudaSOA {
-	float3* dev_positions;
-	float3* dev_velocities;
+	glm::vec3* positions;
+	glm::vec3* velocities;
+	fishesGrid grid;
 };
 
 struct image {

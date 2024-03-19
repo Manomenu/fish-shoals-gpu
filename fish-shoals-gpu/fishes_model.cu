@@ -3,7 +3,7 @@
 FishesModel::FishesModel(FishesModelCreateInfo* createInfo)
 {
 	numberOfFishes = createInfo->numberOfFishes;
-	numberOfBlocks = numberOfFishes / 1000;
+	numberOfBlocks = (numberOfFishes + MAX_THREADS + 1) / MAX_THREADS;
 	fish = new FishModel();
 
 	glCreateVertexArrays(1, &VAO);
@@ -57,7 +57,7 @@ __global__ void setModelsKernel(glm::mat4* models, struct cudaSOA soa)
 		return;
 
 	models[tid] = glm::mat4(1);
-	models[tid] = glm::translate(models[tid], { 1, 1, threadIdx.x });
+	models[tid] = glm::translate(models[tid], { soa.positions[tid]} );
 	//int xd = (int)models[tid][0][0];
 	//int xdd = (int)models[tid][3][0];
 	//int haha = 3;
@@ -78,7 +78,7 @@ void FishesModel::render(Shader* shader, Fishes* fishes,
 	// set model matrices
 	validateCudaStatus(cudaGraphicsMapResources(1, &resource_vbo));
 	validateCudaStatus(cudaGraphicsResourceGetMappedPointer((void**)&dev_models, 0, resource_vbo));
-	setModelsKernel<<<numberOfBlocks, 1000>>>(dev_models, fishes->cudaSOA);
+	setModelsKernel<<<numberOfBlocks, MAX_THREADS>>>(dev_models, fishes->dev_soa);
 	validateCudaStatus(cudaGetLastError());
 	validateCudaStatus(cudaDeviceSynchronize());
 	validateCudaStatus(cudaGraphicsUnmapResources(1, &resource_vbo));
