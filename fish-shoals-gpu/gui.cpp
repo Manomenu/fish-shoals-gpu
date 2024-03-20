@@ -5,9 +5,8 @@ Gui::Gui(Fishes* fishes)
     memcpy(&simulationParams, &fishes->params, sizeof(simulationParams));
 }
 
-void Gui::update(float fps)
+void Gui::update()
 {
-    this->fps = fps;
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -35,7 +34,6 @@ void Gui::update(float fps)
 
     if (ImGui::CollapsingHeader("Simulation information"))
     {
-        ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d fps", fps);
         ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d fishes", FISH_COUNT);
     }
 

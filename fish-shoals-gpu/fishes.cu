@@ -1,15 +1,9 @@
 #include "fishes.cuh"
 
-__global__ void updateGrid1Kernel(cudaSOA soa, float visibility)
+__device__ int getFishCell(glm::vec3 fish_pos, float visibility)
 {
-	int tid = threadIdx.x + blockIdx.x * blockDim.x;
-
-	if (tid >= FISH_COUNT)
-		return;
-
-	glm::vec3 fish_pos = soa.positions[tid];
 	int grid_MAX_ID = (int)glm::ceil(AQUARIUM_LEN / visibility) - 1;
-	
+
 	int gridX_ID = glm::clamp((int)glm::floor((fish_pos.x - AQUARIUM_LEN / 2.0f) / visibility),
 		0, grid_MAX_ID);
 	int gridY_ID = glm::clamp((int)glm::floor((fish_pos.y - AQUARIUM_LEN / 2.0f) / visibility),
@@ -17,10 +11,17 @@ __global__ void updateGrid1Kernel(cudaSOA soa, float visibility)
 	int gridZ_ID = glm::clamp((int)glm::floor((fish_pos.z - AQUARIUM_LEN / 2.0f) / visibility),
 		0, grid_MAX_ID);
 
-	soa.grid.cells[tid] = 
-		gridZ_ID * grid_MAX_ID * grid_MAX_ID 
-		+ gridY_ID * grid_MAX_ID 
-		+ gridX_ID;
+	return gridX_ID + gridY_ID * grid_MAX_ID + gridZ_ID * grid_MAX_ID * grid_MAX_ID;
+}
+
+__global__ void updateGrid1Kernel(cudaSOA soa, float visibility)
+{
+	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+
+	if (tid >= FISH_COUNT)
+		return;
+
+	soa.grid.cells[tid] = getFishCell(soa.positions[tid], visibility);;	
 	soa.grid.fishesIDs[tid] = tid;
 }
 
@@ -50,6 +51,56 @@ __global__ void updateGrid2Kernel(cudaSOA soa)
 	}
 }
 
+__device__ glm::vec3 fishGroupBehaviourVelocityFactor(
+	cudaSOA& soa, 
+	fishesParams& fishesParams, 
+	int tid
+)
+{
+	glm::vec3 separation_factor(0);
+	glm::vec3 velocity(0);
+	glm::vec3 position(0);
+	int numberOfNeighbours = 0;
+
+	float R = 2 * fishesParams.visibility;
+	int grid_division = (int)glm::ceil(AQUARIUM_LEN / R);
+	int cell = getFishCell(soa.positions[tid], R);
+	int X = cell % grid_division;
+	int Y = (cell / grid_division) % grid_division;
+	int Z = cell / (grid_division * grid_division);
+	int coords_count = grid_division * grid_division * grid_division;
+	int x_change = (soa.positions[tid].x >= -AQUARIUM_LEN / 2.0f + (X + 0.5) * R)
+		? 1 
+		: -1;
+	int y_change = (soa.positions[tid].y >= -AQUARIUM_LEN / 2.0f + (Y + 0.5) * R) 
+		? grid_division 
+		: -grid_division;
+	int z_change = (soa.positions[tid].z >= -AQUARIUM_LEN / 2.0f + (Z + 0.5) * R) 
+		? grid_division * grid_division 
+		: -grid_division * grid_division;
+}
+
+__global__ void updateSOAKernel(cudaSOA &dev_soa, fishesParams& params, float frameTime)
+{
+	int tid = threadIdx.x + blockIdx.x * blockDim.x;
+
+	if (tid >= FISH_COUNT)
+		return;
+
+	soa.positions_bb[i] = glm::vec3(0);
+	soa.velocities_bb[i] = glm::vec3(0);
+
+	glm::vec3 new_vel;
+	new_vel = soa.velocities[i] + fishGroupBehaviourVelocityFactor(soa, params, i) * frameTime;
+	new_vel = turn_from_wall(soa.positions[i], params, new_vel) * frameTime;
+	new_vel = speedLimitFactor(params, new_vel);
+
+	glm::vec3 new_pos = soa.positions[i] + (float)d * new_vel;
+
+	soa.velocities_bb[i] = new_vel;
+	soa.positions_bb[i] = new_pos;
+}
+
 Fishes::Fishes(CreateFishesInfo* createInfo)
 {
 	numberOfFishes = createInfo->numberOfFishes;
@@ -58,7 +109,7 @@ Fishes::Fishes(CreateFishesInfo* createInfo)
 	positions = std::vector<float3>(numberOfFishes);
 	velocities = std::vector<float3>(numberOfFishes);
 
-	int grid_divided = (int)glm::ceil((float)AQUARIUM_LEN / (float)params.MIN_VISIBILITY / 2.0f);
+	int grid_divided = (int)glm::ceil((float)AQUARIUM_LEN / (float)params.MIN_VISIBILITY);
 	int grid_MAX_VALUE = grid_divided * grid_divided * grid_divided;
 
 	validateCudaStatus(cudaMalloc(
@@ -139,8 +190,17 @@ Fishes::Fishes(CreateFishesInfo* createInfo)
 	));
 }
 
-void Fishes::update()
+void Fishes::update(float frameTime)
 {
+	int grid_divided = (int)glm::ceil((float)AQUARIUM_LEN / (float)params.MIN_VISIBILITY);
+	int grid_MAX_VALUE = grid_divided * grid_divided * grid_divided;
+
+	validateCudaStatus(cudaMemset(dev_soa.grid.cells, 0, sizeof(int) * FISH_COUNT));
+	validateCudaStatus(cudaMemset(dev_soa.grid.fishesIDs, 0, sizeof(int) * FISH_COUNT));
+	validateCudaStatus(cudaMemset(dev_soa.grid.starts, -1, sizeof(int) * grid_MAX_VALUE));
+	validateCudaStatus(cudaMemset(dev_soa.grid.ends, -1, sizeof(int) * grid_MAX_VALUE));
+
+
 	updateGrid1Kernel<<<numberOfBlocks, MAX_THREADS>>>(dev_soa, params.visibility);
 	validateCudaStatus(cudaGetLastError());
 	validateCudaStatus(cudaDeviceSynchronize());
@@ -155,6 +215,10 @@ void Fishes::update()
 	validateCudaStatus(cudaDeviceSynchronize());
 
 	updateGrid2Kernel<<<numberOfBlocks, MAX_THREADS>>>(dev_soa);
+	validateCudaStatus(cudaGetLastError());
+	validateCudaStatus(cudaDeviceSynchronize());
+
+	updateSOAKernel<<<numberOfBlocks, MAX_THREADS>>>(dev_soa, params, frameTime);
 	validateCudaStatus(cudaGetLastError());
 	validateCudaStatus(cudaDeviceSynchronize());
 }

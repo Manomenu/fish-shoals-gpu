@@ -8,7 +8,7 @@ class Scene {
 public:
 	Scene(int numberOfFishes);
 	~Scene();
-	void update(float fps);
+	void update(float frameTime);
 	void movePlayer(glm::vec3 dPos);
 	void spinPlayer(glm::vec3 dEulers);
 

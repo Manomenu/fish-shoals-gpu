@@ -17,6 +17,6 @@ public:
 
 	Aquarium(CreateAquariumInfo* createInfo);
 	~Aquarium();
-	void update();
+	void update(float frameTime);
 };
 

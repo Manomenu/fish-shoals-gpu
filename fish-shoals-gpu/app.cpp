@@ -170,7 +170,7 @@ returnCode App::mainLoop() {
 	//update
 	calculateFrameRate();
 	updateWindowSize();
-	scene->update(fps);
+	scene->update(frameTime / 16.0f);
 
 	//draw
 	renderer->render(scene);
@@ -216,7 +216,6 @@ void App::calculateFrameRate() {
 		lastTime = currentTime;
 		numFrames = -1;
 		frameTime = float(1000.0 / framerate);
-		this->fps = framerate;
 	}
 
 	++numFrames;

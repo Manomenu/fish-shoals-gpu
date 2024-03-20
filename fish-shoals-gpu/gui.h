@@ -11,7 +11,7 @@ public:
 	float fps = 0;
 	simulationParams simulationParams;
 
-	void update(float fps);
+	void update();
 
 	Gui(Fishes* fishes);
 };

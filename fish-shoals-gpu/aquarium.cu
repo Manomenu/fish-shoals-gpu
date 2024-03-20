@@ -16,8 +16,8 @@ Aquarium::~Aquarium()
 {
 }
 
-void Aquarium::update()
+void Aquarium::update(float frameTime)
 {
-	fishes->update();
+	fishes->update(frameTime);
 }
 

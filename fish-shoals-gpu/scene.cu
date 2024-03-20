@@ -21,10 +21,10 @@ Scene::~Scene() {
 	delete player;
 }
 
-void Scene::update(float fps) {
-	gui->update(fps);
+void Scene::update(float frameTime) {
+	gui->update();
 	player->update();
-	aquarium->update();
+	aquarium->update(frameTime);
 }
 
 void Scene::movePlayer(glm::vec3 dPos) {

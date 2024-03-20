@@ -44,5 +44,5 @@ public:
 
 	Fishes(CreateFishesInfo*);
 	~Fishes();
-	void update();
+	void update(float frameTime);
 };

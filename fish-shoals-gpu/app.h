@@ -33,7 +33,6 @@ private:
 	double lastTime, currentTime;
 	int numFrames;
 	float frameTime;
-	int fps;
 
 #pragma region Callbacks
 	static void framebufferSizeCallback(GLFWwindow*, int, int);
