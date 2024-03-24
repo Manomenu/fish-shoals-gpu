@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="app.h" />
     <ClInclude Include="aquarium.cuh" />
+    <ClInclude Include="camera.h" />
     <ClInclude Include="config.cuh" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="cuda_utils.cuh" />
@@ -41,9 +42,6 @@
     <ClInclude Include="imstb_rectpack.h" />
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
-    <ClInclude Include="material.h" />
-    <ClInclude Include="player.h" />
-    <ClInclude Include="pyramid_model.h" />
     <ClInclude Include="rectangle_model.h" />
     <ClInclude Include="scene.cuh" />
     <ClInclude Include="shader.h" />
@@ -65,9 +63,6 @@
     <ClCompile Include="imgui_stdlib.cpp" />
     <ClCompile Include="imgui_tables.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
-    <ClCompile Include="material.cpp" />
-    <ClCompile Include="player.cpp" />
-    <ClCompile Include="pyramid_model.cpp" />
     <ClCompile Include="rectangle_model.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -82,9 +77,6 @@
     <Text Include="fishesVertex.txt" />
     <Text Include="fragment.txt" />
     <Text Include="vertex.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="wood.jpeg" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EFCA4178-58B6-4537-B1C3-28A3E5FC0273}</ProjectGuid>

@@ -55,12 +55,6 @@
     <ClCompile Include="image.cpp">
       <Filter>view\image</Filter>
     </ClCompile>
-    <ClCompile Include="material.cpp">
-      <Filter>view\material</Filter>
-    </ClCompile>
-    <ClCompile Include="pyramid_model.cpp">
-      <Filter>view\pyramid_model</Filter>
-    </ClCompile>
     <ClCompile Include="rectangle_model.cpp">
       <Filter>view\rectangle_model</Filter>
     </ClCompile>
@@ -72,9 +66,6 @@
     </ClCompile>
     <ClCompile Include="gui.cpp">
       <Filter>model\gui</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>model\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -130,12 +121,6 @@
     <ClInclude Include="image.h">
       <Filter>view\image</Filter>
     </ClInclude>
-    <ClInclude Include="material.h">
-      <Filter>view\material</Filter>
-    </ClInclude>
-    <ClInclude Include="pyramid_model.h">
-      <Filter>view\pyramid_model</Filter>
-    </ClInclude>
     <ClInclude Include="rectangle_model.h">
       <Filter>view\rectangle_model</Filter>
     </ClInclude>
@@ -154,14 +139,14 @@
     <ClInclude Include="gui.h">
       <Filter>model\gui</Filter>
     </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>model\player</Filter>
-    </ClInclude>
     <ClInclude Include="scene.cuh">
       <Filter>model\scene</Filter>
     </ClInclude>
     <ClInclude Include="fish_model.cuh">
       <Filter>view\fish_model</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>model\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -191,9 +176,6 @@
     <Filter Include="shaders">
       <UniqueIdentifier>{6782047f-af2c-4588-8d6a-f1a899b0f05a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="textures">
-      <UniqueIdentifier>{01e35c95-6ec8-4c13-a1b4-63fedf7628ec}</UniqueIdentifier>
-    </Filter>
     <Filter Include="view\engine">
       <UniqueIdentifier>{5f8ba3a0-7004-404b-8565-f1c413537d14}</UniqueIdentifier>
     </Filter>
@@ -205,12 +187,6 @@
     </Filter>
     <Filter Include="view\image">
       <UniqueIdentifier>{f1c86c48-3719-4da1-8ea7-6a71351a66a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="view\material">
-      <UniqueIdentifier>{9b37ab8b-0ef2-43df-88d9-37ab85cead74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="view\pyramid_model">
-      <UniqueIdentifier>{2a59a5d4-ee2a-4a64-a168-9e853880e271}</UniqueIdentifier>
     </Filter>
     <Filter Include="view\rectangle_model">
       <UniqueIdentifier>{e885c432-bb05-4e0c-8625-8228326b3657}</UniqueIdentifier>
@@ -230,14 +206,14 @@
     <Filter Include="model\gui">
       <UniqueIdentifier>{94c9184c-e727-4b70-aad7-bb4486986bf3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="model\player">
-      <UniqueIdentifier>{c27de564-f94a-4a36-9394-8f14f7b27320}</UniqueIdentifier>
-    </Filter>
     <Filter Include="model\scene">
       <UniqueIdentifier>{f1068b12-84ba-4579-ade8-246561483c2f}</UniqueIdentifier>
     </Filter>
     <Filter Include="view\fish_model">
       <UniqueIdentifier>{e4de1ef4-2976-4387-a614-21791f6a9bce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="model\camera">
+      <UniqueIdentifier>{2576a562-437d-475f-9ac2-fa5d7f414744}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -258,10 +234,5 @@
     <Text Include="fishesFragment.txt">
       <Filter>shaders</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="wood.jpeg">
-      <Filter>textures</Filter>
-    </Image>
   </ItemGroup>
 </Project>

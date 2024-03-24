@@ -10,7 +10,7 @@ public:
 	bool show_window = true;
 	float fps = 0;
 	simulationParams simulationParams;
-	float *sep, *coh, *alg, *min_speed, *max_speed, *margin, *turn, *visibility;
+	float *sep, *sep_alter, *coh, *coh_alter, *alg, *alg_alter, *min_speed, *max_speed, *margin, *turn, *visibility;
 
 	void update();
 

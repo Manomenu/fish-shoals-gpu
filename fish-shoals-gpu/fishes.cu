@@ -79,7 +79,7 @@ __device__ void checkFishNeighbourhood(
 			fishData.separation_factor += (dist2 > 1e-8)
 				? glm::normalize(position_diff) / (dist2)
 				: glm::vec3(
-					 mod2 * 0.001f, 0, -mod2 * 0.001f
+					 mod2 * 0.001f, 0, mod2 * 0.001f * fishId
 				);
 			fishData.velocity += soa.velocities[fishId];
 			fishData.position += soa.positions[fishId];
@@ -113,37 +113,59 @@ __device__ glm::vec3 fishGroupBehaviourVelocityFactor(
 	int yDist = (soa.positions[tid].y >= coord_begin + (Y + 0.5) * cellLen) 
 		? grid_division 
 		: -grid_division;
-	int zDist = (soa.positions[tid].z >= coord_begin / 2.0f + (Z + 0.5) * cellLen) 
+	int zDist = (soa.positions[tid].z >= coord_begin + (Z + 0.5) * cellLen) 
 		? grid_division2 
 		: -grid_division2;
 
 	int checkout_cell_ID;
-	for (int layer = 0; layer < 2; ++layer) // CHECK 8 cells
-	{
-		checkout_cell_ID = cell + layer * zDist;
-		if (checkout_cell_ID >= 0 
-			&& checkout_cell_ID < coords_count)
-			checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
 
-		checkout_cell_ID = cell + xDist + layer * zDist;
-		if (checkout_cell_ID >= 0 
-			&& checkout_cell_ID < coords_count
-			&& checkout_cell_ID / grid_division == (checkout_cell_ID - xDist) / grid_division)
-			checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
+	checkout_cell_ID = cell;
+	if (checkout_cell_ID >= 0
+		&& checkout_cell_ID < coords_count)
+		checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
 
-		checkout_cell_ID = cell + yDist + layer * zDist;
-		if (checkout_cell_ID >= 0 
-			&& checkout_cell_ID < coords_count
-			&& checkout_cell_ID / grid_division2 == (checkout_cell_ID - yDist) / grid_division2)
-			checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
+	checkout_cell_ID = cell + zDist;
+	if (checkout_cell_ID >= 0 
+		&& checkout_cell_ID < coords_count)
+		checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
 
-		checkout_cell_ID = cell + xDist + yDist + layer * zDist;
-		if (checkout_cell_ID >= 0 
-			&& checkout_cell_ID < coords_count
-			&& checkout_cell_ID / grid_division == (checkout_cell_ID - xDist) / grid_division
-			&& checkout_cell_ID / grid_division2 == (checkout_cell_ID - yDist) / grid_division2) 
-			checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
-	}
+	checkout_cell_ID = cell + xDist;
+	if (checkout_cell_ID >= 0
+		&& checkout_cell_ID < coords_count
+		&& checkout_cell_ID / grid_division == (checkout_cell_ID - xDist) / grid_division)
+		checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
+
+	checkout_cell_ID = cell + xDist + zDist;
+	if (checkout_cell_ID >= 0 
+		&& checkout_cell_ID < coords_count
+		&& checkout_cell_ID / grid_division == (checkout_cell_ID - xDist) / grid_division)
+		checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
+
+	checkout_cell_ID = cell + yDist;
+	if (checkout_cell_ID >= 0
+		&& checkout_cell_ID < coords_count
+		&& checkout_cell_ID / grid_division2 == (checkout_cell_ID - yDist) / grid_division2)
+		checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
+
+	checkout_cell_ID = cell + yDist + zDist;
+	if (checkout_cell_ID >= 0 
+		&& checkout_cell_ID < coords_count
+		&& checkout_cell_ID / grid_division2 == (checkout_cell_ID - yDist) / grid_division2)
+		checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
+
+	checkout_cell_ID = cell + xDist + yDist;
+	if (checkout_cell_ID >= 0
+		&& checkout_cell_ID < coords_count
+		&& checkout_cell_ID / grid_division == (checkout_cell_ID - xDist) / grid_division
+		&& checkout_cell_ID / grid_division2 == (checkout_cell_ID - yDist) / grid_division2)
+		checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
+
+	checkout_cell_ID = cell + xDist + yDist + zDist;
+	if (checkout_cell_ID >= 0 
+		&& checkout_cell_ID < coords_count
+		&& checkout_cell_ID / grid_division == (checkout_cell_ID - xDist) / grid_division
+		&& checkout_cell_ID / grid_division2 == (checkout_cell_ID - yDist) / grid_division2) 
+		checkFishNeighbourhood(soa, fishesParams, fishData, checkout_cell_ID, tid);
 
 	if (fishData.numberOfNeighbours == 0)
 	{
@@ -155,9 +177,13 @@ __device__ glm::vec3 fishGroupBehaviourVelocityFactor(
 	fishData.alignment_factor = fishData.velocity - soa.velocities[tid];
 	fishData.cohesion_factor = fishData.position - soa.positions[tid];
 
-	return fishesParams.separation * fishesParams.SEPARATION_SCALING * fishData.separation_factor
-		+ fishesParams.cohesion * fishData.cohesion_factor
-		+ fishesParams.alignment * fishData.alignment_factor;
+	float separation = (tid % 2 == 0 ? fishesParams.separation : fishesParams.separation_alter);
+	float cohesion = (tid % 2 == 0 ? fishesParams.cohesion : fishesParams.cohesion_alter);
+	float alignment = (tid % 2 == 0 ? fishesParams.alignment : fishesParams.alignment_alter);
+
+	return separation * fishesParams.SEPARATION_SCALING * fishData.separation_factor
+		+ cohesion * fishData.cohesion_factor
+		+ alignment * fishData.alignment_factor;
 }
 
 __device__ glm::vec3 wallVelocityFactor(glm::vec3 pos, fishesParams& fishesParams, glm::vec3 vel)
@@ -209,7 +235,7 @@ __global__ void updateSOAKernel(cudaSOA soa, fishesParams params, float frameTim
 
 	// this just just to not override old value whilst other threads still work {
 	soa.velocities_P[tid] = new_velocity; 
-	soa.positions_P[tid] = soa.positions[tid] + frameTime * new_velocity;
+	soa.positions_P[tid] = soa.positions[tid] + new_velocity * frameTime;
 
 	__syncthreads();
 
@@ -221,46 +247,8 @@ __global__ void updateSOAKernel(cudaSOA soa, fishesParams params, float frameTim
 Fishes::Fishes(CreateFishesInfo* createInfo)
 {
 	numberOfFishes = createInfo->numberOfFishes;
-	numberOfBlocks = (numberOfFishes + MAX_THREADS - 1) / MAX_THREADS;
-
 	positions = std::vector<float3>(numberOfFishes);
 	velocities = std::vector<float3>(numberOfFishes);
-
-	int grid_divided = (int)glm::ceil(AQUARIUM_LEN / params.MIN_CELL_LEN);
-	int gridIDsCount = grid_divided * grid_divided * grid_divided;
-
-	validateCudaStatus(cudaMalloc(
-		(void**)&dev_soa.grid.cells, 
-		sizeof(int) * numberOfFishes
-	));
-	validateCudaStatus(cudaMalloc(
-		(void**)&dev_soa.grid.fishesIDs,
-		sizeof(int) * numberOfFishes
-	));
-	validateCudaStatus(cudaMalloc(
-		(void**)&dev_soa.velocities,
-		sizeof(float3) * numberOfFishes
-	));
-	validateCudaStatus(cudaMalloc(
-		(void**)&dev_soa.positions,
-		sizeof(float3) * numberOfFishes
-	));
-	validateCudaStatus(cudaMalloc(
-		(void**)&dev_soa.velocities_P,
-		sizeof(float3) * numberOfFishes
-	));
-	validateCudaStatus(cudaMalloc(
-		(void**)&dev_soa.positions_P,
-		sizeof(float3) * numberOfFishes
-	));
-	validateCudaStatus(cudaMalloc(
-		(void**)&dev_soa.grid.starts,
-		sizeof(int) * gridIDsCount
-	));
-	validateCudaStatus(cudaMalloc(
-		(void**)&dev_soa.grid.ends,
-		sizeof(int) * gridIDsCount
-	));
 
 	float minX = -createInfo->aquariumSize.x / 2.0f * 0.8f;
 	float minY = -createInfo->aquariumSize.y / 2.0f * 0.8f;
@@ -300,6 +288,47 @@ Fishes::Fishes(CreateFishesInfo* createInfo)
 		fish.y = dz;
 	}
 
+	#ifdef CPU
+
+	#else
+	numberOfBlocks = (numberOfFishes + MAX_THREADS - 1) / MAX_THREADS;
+
+	int grid_divided = (int)glm::ceil(AQUARIUM_LEN / params.MIN_CELL_LEN);
+	int gridIDsCount = grid_divided * grid_divided * grid_divided;
+
+	validateCudaStatus(cudaMalloc(
+		(void**)&dev_soa.grid.cells,
+		sizeof(int) * numberOfFishes
+	));
+	validateCudaStatus(cudaMalloc(
+		(void**)&dev_soa.grid.fishesIDs,
+		sizeof(int) * numberOfFishes
+	));
+	validateCudaStatus(cudaMalloc(
+		(void**)&dev_soa.velocities,
+		sizeof(float3) * numberOfFishes
+	));
+	validateCudaStatus(cudaMalloc(
+		(void**)&dev_soa.positions,
+		sizeof(float3) * numberOfFishes
+	));
+	validateCudaStatus(cudaMalloc(
+		(void**)&dev_soa.velocities_P,
+		sizeof(float3) * numberOfFishes
+	));
+	validateCudaStatus(cudaMalloc(
+		(void**)&dev_soa.positions_P,
+		sizeof(float3) * numberOfFishes
+	));
+	validateCudaStatus(cudaMalloc(
+		(void**)&dev_soa.grid.starts,
+		sizeof(int) * gridIDsCount
+	));
+	validateCudaStatus(cudaMalloc(
+		(void**)&dev_soa.grid.ends,
+		sizeof(int) * gridIDsCount
+	));
+
 	validateCudaStatus(cudaMemcpy(
 		dev_soa.velocities,
 		velocities.data(),
@@ -313,12 +342,20 @@ Fishes::Fishes(CreateFishesInfo* createInfo)
 		sizeof(float3) * numberOfFishes,
 		cudaMemcpyHostToDevice
 	));
+	#endif
 }
 
 void Fishes::update(float frameTime)
 {
-	frameTime /= 16.0f;
+	#ifdef CPU
+	updateCPU(frameTime);
+	#else
+	updateGPU(frameTime);
+	#endif
+}
 
+void Fishes::updateGPU(float frameTime)
+{
 	int grid_divided = (int)glm::ceil(AQUARIUM_LEN / params.MIN_CELL_LEN);
 	int grid_MAX_VALUE = grid_divided * grid_divided * grid_divided;
 
@@ -327,30 +364,33 @@ void Fishes::update(float frameTime)
 	validateCudaStatus(cudaMemset(dev_soa.grid.starts, -1, sizeof(int) * grid_MAX_VALUE));
 	validateCudaStatus(cudaMemset(dev_soa.grid.ends, -1, sizeof(int) * grid_MAX_VALUE));
 
-	updateGrid1Kernel<<<numberOfBlocks, MAX_THREADS>>>(dev_soa, params.visibility);
+	updateGrid1Kernel << <numberOfBlocks, MAX_THREADS >> > (dev_soa, params.visibility);
 	validateCudaStatus(cudaPeekAtLastError());
 	validateCudaStatus(cudaDeviceSynchronize());
 
 	thrust::sort_by_key(
-		thrust::device, 
-		dev_soa.grid.cells, 
-		dev_soa.grid.cells + FISH_COUNT, 
+		thrust::device,
+		dev_soa.grid.cells,
+		dev_soa.grid.cells + FISH_COUNT,
 		dev_soa.grid.fishesIDs
 	);
 	validateCudaStatus(cudaPeekAtLastError());
 	validateCudaStatus(cudaDeviceSynchronize());
 
-	updateGrid2Kernel<<<numberOfBlocks, MAX_THREADS>>>(dev_soa);
+	updateGrid2Kernel << <numberOfBlocks, MAX_THREADS >> > (dev_soa);
 	validateCudaStatus(cudaPeekAtLastError());
 	validateCudaStatus(cudaDeviceSynchronize());
 
-	updateSOAKernel<<<numberOfBlocks, MAX_THREADS>>>(dev_soa, params, frameTime);
+	updateSOAKernel << <numberOfBlocks, MAX_THREADS >> > (dev_soa, params, frameTime);
 	validateCudaStatus(cudaPeekAtLastError());
 	validateCudaStatus(cudaDeviceSynchronize());
 }
 
 Fishes::~Fishes()
 {
+#ifdef CPU
+	
+#else
 	validateCudaStatus(cudaFree(dev_soa.positions));
 	validateCudaStatus(cudaFree(dev_soa.velocities));
 	validateCudaStatus(cudaFree(dev_soa.grid.cells));
@@ -359,4 +399,5 @@ Fishes::~Fishes()
 	validateCudaStatus(cudaFree(dev_soa.grid.fishesIDs));
 	validateCudaStatus(cudaFree(dev_soa.positions_P));
 	validateCudaStatus(cudaFree(dev_soa.velocities_P));
+#endif
 }

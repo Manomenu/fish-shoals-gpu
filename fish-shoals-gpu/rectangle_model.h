@@ -2,7 +2,6 @@
 #include "config.cuh"
 #include "cube.h"
 #include "shader.h"
-#include "material.h"
 
 struct RectangleModelCreateInfo {
 	glm::vec3 size;
@@ -15,7 +14,7 @@ public:
 
 	RectangleModel(RectangleModelCreateInfo* createInfo);
 	~RectangleModel();
-	void render(Cube* cube, Material* material, Shader* shader, bool shouldFill, 
+	void render(Cube* cube, Shader* shader, bool shouldFill, 
 		const glm::mat4& view, const glm::mat4& projection);
 };
 

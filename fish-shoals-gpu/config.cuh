@@ -1,5 +1,9 @@
 #pragma once
 
+// ----------------\
+# define CPU
+// ----------------/
+
 #pragma region General_includes
 
 #include "cuda_runtime.h"
@@ -37,7 +41,11 @@ const float FOVY = 45.0f;
 #define AQUARIUM_SIZE AQUARIUM_LEN, AQUARIUM_LEN, AQUARIUM_LEN
 #define FISH_RENDER_H 0.06f
 #define FISH_RENDER_A 0.02f
+#ifdef CPU
+#define FISH_COUNT 3000
+#else
 #define FISH_COUNT 50000
+#endif
 #define MAX_THREADS 1024
 
 #pragma endregion

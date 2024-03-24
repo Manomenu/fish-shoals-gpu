@@ -57,21 +57,9 @@ __global__ void setModelsKernel(glm::mat4* models, struct cudaSOA soa)
 		return;
 
 	glm::vec3 v = glm::normalize(soa.velocities[tid]);
+	glm::mat4 rotate = glm::toMat4(glm::rotation(glm::vec3(0, 1, 0), v));
 
-	/*float c1 = sqrt(v.x * v.x + v.y * v.y);
-	float s1 = v.z;
-	
-	float c2 = c1 ? v.x / c1 : 1.0;
-	float s2 = c1 ? v.y / c1 : 0.0;
-	models[tid] = glm::mat4(
-		glm::vec4(v, 0),
-		glm::vec4(-s2, c2, 0, 0),
-		glm::vec4(-s1 * c2, -s1 * s2, c1, 0),
-		glm::vec4(soa.positions[tid], 1)
-	);*/
-
-	models[tid] = glm::mat4(1);
-	models[tid][3] = glm::vec4(soa.positions[tid], 1);
+	models[tid] = glm::translate(glm::mat4(1), soa.positions[tid]) * rotate;
 }
 
 void FishesModel::render(Shader* shader, Fishes* fishes, 
@@ -87,11 +75,10 @@ void FishesModel::render(Shader* shader, Fishes* fishes,
 	validateCudaStatus(cudaGraphicsMapResources(1, &resource_vbo));
 	validateCudaStatus(cudaGraphicsResourceGetMappedPointer((void**)&dev_models, 0, resource_vbo));
 	setModelsKernel<<<numberOfBlocks, MAX_THREADS>>>(dev_models, fishes->dev_soa);
-	validateCudaStatus(cudaGetLastError());
+	validateCudaStatus(cudaPeekAtLastError());
 	validateCudaStatus(cudaDeviceSynchronize());
 	validateCudaStatus(cudaGraphicsUnmapResources(1, &resource_vbo));
 	
-
 	shader->use();
 	shader->setMat4("view", view);
 	shader->setMat4("projection", projection);

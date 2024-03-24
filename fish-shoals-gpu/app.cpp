@@ -59,79 +59,20 @@ void App::framebufferSizeCallback(GLFWwindow * window, int width, int height)
 
 returnCode App::processInput() {
 
-	int wasdState{ 0 };
-	float walk_direction{ scene->player->eulers.z };
-	bool walking{ false };
-
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		wasdState += 1;
+		scene->camera->ProcessKeyboard(Camera_Movement::FORWARD, frameTime);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		wasdState += 2;
+		scene->camera->ProcessKeyboard(Camera_Movement::LEFT, frameTime);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		wasdState += 4;
+		scene->camera->ProcessKeyboard(Camera_Movement::BACKWARD, frameTime);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		wasdState += 8;
-	}
-
-	switch (wasdState) {
-	case 1:
-	case 11:
-		//forwards
-		walking = true;
-		break;
-	case 3:
-		//left-forwards
-		walking = true;
-		walk_direction += 45;
-		break;
-	case 2:
-	case 7:
-		//left
-		walking = true;
-		walk_direction += 90;
-		break;
-	case 6:
-		//left-backwards
-		walking = true;
-		walk_direction += 135;
-		break;
-	case 4:
-	case 14:
-		//backwards
-		walking = true;
-		walk_direction += 180;
-		break;
-	case 12:
-		//right-backwards
-		walking = true;
-		walk_direction += 225;
-		break;
-	case 8:
-	case 13:
-		//right
-		walking = true;
-		walk_direction += 270;
-		break;
-	case 9:
-		//right-forwards
-		walking = true;
-		walk_direction += 315;
-	}
-
-	if (walking) {
-		scene->movePlayer(
-			0.1f * frameTime / 16.0f * glm::vec3{
-				glm::cos(glm::radians(walk_direction)),
-				glm::sin(glm::radians(walk_direction)),
-				0.0f
-			}
-		);
+		scene->camera->ProcessKeyboard(Camera_Movement::RIGHT, frameTime);
 	}
 
 	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
@@ -154,11 +95,7 @@ returnCode App::processInput() {
 		float delta_x{ static_cast<float>(mouse_x - static_cast<double>(width / 2)) };
 		float delta_y{ static_cast<float>(mouse_y - static_cast<double>(height / 2)) };
 
-		scene->spinPlayer(
-			frameTime / 16.0f * glm::vec3{
-				0.0f, delta_y * 2, -delta_x * 2
-			}
-		);
+		scene->camera->ProcessMouseMovement(delta_x * 2, -delta_y * 2);
 	}
 	else
 	{
@@ -237,7 +174,7 @@ void App::calculateFrameRate() {
 		glfwSetWindowTitle(window, title.str().c_str());
 		lastTime = currentTime;
 		numFrames = -1;
-		frameTime = float(delta);
+		frameTime = std::min(float(delta), 1.0f / 60.0f);
 		Sleep(1000.0f / 60.0f - frameTime);
 	}
 

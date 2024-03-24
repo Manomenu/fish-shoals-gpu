@@ -42,7 +42,7 @@ struct fishesParams {
 	const float MIN_MARGIN = 0.0f;
 	const float MAX_MARGIN = AQUARIUM_LEN / 5.0f;
 	const float MIN_MIN_SPEED = 0.001f;
-	const float MAX_MAX_SPEED = 0.6f; 
+	const float MAX_MAX_SPEED = 0.05f; 
 	const float MIN_VISIBILITY = 0.04f;
 	const float MAX_VISIBILITY = 0.5f;
 	const float MIN_CELL_LEN = 2.0f * MIN_VISIBILITY;
@@ -52,7 +52,10 @@ struct fishesParams {
 	float separation = (MAX_SEPARATION - MIN_SEPARATION) / 2.0f;
 	float alignment = (MAX_ALIGNMENT - MIN_ALIGNMENT) / 2.0f;
 	float cohesion = (MAX_COHESION - MIN_COHESION) / 2.0f;
-	float margin = 0.2f;
+	float separation_alter = (MAX_SEPARATION - MIN_SEPARATION) / 2.0f;
+	float alignment_alter = (MAX_ALIGNMENT - MIN_ALIGNMENT) / 2.0f;
+	float cohesion_alter = (MAX_COHESION - MIN_COHESION) / 2.0f;
+	float margin = 0.0f;
 	float max_speed = 0.2f;
 	float min_speed = 0.005f;
 	float visibility = 0.1f;
@@ -75,4 +78,6 @@ public:
 	Fishes(CreateFishesInfo*);
 	~Fishes();
 	void update(float frameTime);
+	void updateGPU(float frameTime);
+	void updateCPU(float frameTime);
 };

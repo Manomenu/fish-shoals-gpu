@@ -22,7 +22,6 @@ Engine::Engine(int width, int height, int numberOfFishes) {
 	glEnable(GL_DEPTH_TEST);
 
 	createModels();
-	createMaterials();
 }
 
 Engine::~Engine() {
@@ -45,19 +44,11 @@ void Engine::createModels() {
 	fishesModel = new FishesModel(&fishesInfo);
 }
 
-void Engine::createMaterials() {
-	// i can create wood for example
-}
-
 void Engine::render(Scene* scene)
 {
 	// prepraring universal transforms
 	const glm::mat4 view_transform{
-		glm::lookAt(
-			scene->player->position,
-			scene->player->position + scene->player->forwards,
-			scene->player->up
-		)
+		scene->camera->GetViewMatrix()
 	};
 
 	float aspectRatio = (float)width / float(height);
@@ -66,7 +57,7 @@ void Engine::render(Scene* scene)
 	// render scene
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	aquariumModel->render(scene->aquarium, nullptr, shader, false, view_transform, projection_transform);
+	aquariumModel->render(scene->aquarium, shader, false, view_transform, projection_transform);
 
 	fishesModel->render(fishesShader, scene->aquarium->fishes, view_transform, projection_transform);
 
