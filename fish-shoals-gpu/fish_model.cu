@@ -5,10 +5,20 @@ FishModel::FishModel()
 	float sqrt3 = glm::sqrt(3);
 	std::vector<float> vertices =
 	{
-		h, 0, 0,
-		0, 0, a * sqrt3 / 3,
-		0, -a / 2, -a * sqrt3 / 6,
-		0,	a / 2, -a * sqrt3 / 6,
+		//0, 0, h / 2.0f,
+		//0, a* sqrt3 / 3.0f, -h / 2.0f,
+		//a / 2.0f, -a * sqrt3 / 6.0f, -h / 2.0f,
+		//-a / 2.0f, -a * sqrt3 / 6.0f, -h / 2.0f
+
+		0, h / 2.0f, 0,
+		0, -h / 2.0f, a* sqrt3 / 3.0f,
+		a / 2.0f, -h / 2.0f, -a * sqrt3 / 6.0f,
+		-a / 2.0f, -h / 2.0f, -a * sqrt3 / 6.0f
+
+		// h / 2.0f,         0,                 0,
+		//-h / 2.0f,         0,  a * sqrt3 / 3.0f,
+		//-h / 2.0f, -a / 2.0f, -a * sqrt3 / 6.0f,
+		//-h / 2.0f,	a / 2.0f, -a * sqrt3 / 6.0f,
 	};
 	std::copy(vertices.begin(), vertices.end(), this->vertices);
 

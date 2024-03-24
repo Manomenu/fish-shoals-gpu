@@ -33,6 +33,8 @@ private:
 	double lastTime, currentTime;
 	int numFrames;
 	float frameTime;
+	bool lock = false;
+	bool pause = false;
 
 #pragma region Callbacks
 	static void framebufferSizeCallback(GLFWwindow*, int, int);

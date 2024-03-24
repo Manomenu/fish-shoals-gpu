@@ -134,7 +134,16 @@ returnCode App::processInput() {
 		);
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) != GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+	{
+		lock = true;
+	}
+	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
+	{
+		lock = false;
+	}
+
+	if (lock)
 	{
 		ImGui::SetMouseCursor(ImGuiMouseCursor_None);
 
@@ -170,7 +179,19 @@ returnCode App::mainLoop() {
 	//update
 	calculateFrameRate();
 	updateWindowSize();
-	scene->update(frameTime / 16.0f);
+
+	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+	{
+		pause = true;
+	}
+	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+	{
+		pause = false;
+	}
+	if (!pause)
+	{
+		scene->update(frameTime);
+	}
 
 	//draw
 	renderer->render(scene);
@@ -203,7 +224,8 @@ App::~App() {
 	ImGui::DestroyContext();
 	glfwTerminate();
 }
-
+#define NOMINMAX
+#include<windows.h> 
 void App::calculateFrameRate() {
 	currentTime = glfwGetTime();
 	double delta = currentTime - lastTime;
@@ -215,7 +237,8 @@ void App::calculateFrameRate() {
 		glfwSetWindowTitle(window, title.str().c_str());
 		lastTime = currentTime;
 		numFrames = -1;
-		frameTime = float(1000.0 / framerate);
+		frameTime = float(delta);
+		Sleep(1000.0f / 60.0f - frameTime);
 	}
 
 	++numFrames;

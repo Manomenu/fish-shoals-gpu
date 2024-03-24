@@ -3,7 +3,7 @@
 FishesModel::FishesModel(FishesModelCreateInfo* createInfo)
 {
 	numberOfFishes = createInfo->numberOfFishes;
-	numberOfBlocks = (numberOfFishes + MAX_THREADS + 1) / MAX_THREADS;
+	numberOfBlocks = (numberOfFishes + MAX_THREADS - 1) / MAX_THREADS;
 	fish = new FishModel();
 
 	glCreateVertexArrays(1, &VAO);
@@ -24,9 +24,9 @@ FishesModel::FishesModel(FishesModelCreateInfo* createInfo)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(models), models, GL_DYNAMIC_DRAW);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(0 * sizeof(glm::vec4)));
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(1 * sizeof(glm::vec4)));
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
 	glEnableVertexAttribArray(4);
@@ -56,14 +56,22 @@ __global__ void setModelsKernel(glm::mat4* models, struct cudaSOA soa)
 	if (tid >= FISH_COUNT)
 		return;
 
-	models[tid] = glm::mat4(1);
-	models[tid] = glm::translate(models[tid], { soa.positions[tid]} );
-	//int xd = (int)models[tid][0][0];
-	//int xdd = (int)models[tid][3][0];
-	//int haha = 3;
-	
+	glm::vec3 v = glm::normalize(soa.velocities[tid]);
 
-	__syncthreads();
+	/*float c1 = sqrt(v.x * v.x + v.y * v.y);
+	float s1 = v.z;
+	
+	float c2 = c1 ? v.x / c1 : 1.0;
+	float s2 = c1 ? v.y / c1 : 0.0;
+	models[tid] = glm::mat4(
+		glm::vec4(v, 0),
+		glm::vec4(-s2, c2, 0, 0),
+		glm::vec4(-s1 * c2, -s1 * s2, c1, 0),
+		glm::vec4(soa.positions[tid], 1)
+	);*/
+
+	models[tid] = glm::mat4(1);
+	models[tid][3] = glm::vec4(soa.positions[tid], 1);
 }
 
 void FishesModel::render(Shader* shader, Fishes* fishes, 
