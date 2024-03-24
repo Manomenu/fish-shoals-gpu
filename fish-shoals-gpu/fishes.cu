@@ -1,6 +1,6 @@
 #include "fishes.cuh"
 
-__device__ int getFishCell(glm::vec3 fish_pos, float cellLen)
+__device__ __host__ int getFishCell(glm::vec3 fish_pos, float cellLen)
 {
 	int gridIDsCount = (int)glm::ceil(AQUARIUM_LEN / cellLen);
 
@@ -247,8 +247,8 @@ __global__ void updateSOAKernel(cudaSOA soa, fishesParams params, float frameTim
 Fishes::Fishes(CreateFishesInfo* createInfo)
 {
 	numberOfFishes = createInfo->numberOfFishes;
-	positions = std::vector<float3>(numberOfFishes);
-	velocities = std::vector<float3>(numberOfFishes);
+	positions = std::vector<glm::vec3>(numberOfFishes);
+	velocities = std::vector<glm::vec3>(numberOfFishes);
 
 	float minX = -createInfo->aquariumSize.x / 2.0f * 0.8f;
 	float minY = -createInfo->aquariumSize.y / 2.0f * 0.8f;
@@ -266,7 +266,7 @@ Fishes::Fishes(CreateFishesInfo* createInfo)
 
 	for (int i = 0; i < FISH_COUNT; ++i)
 	{
-		float3& fish = positions[i];
+		glm::vec3& fish = positions[i];
 
 		float randx = xDist(gen);
 		fish.x = randx;
@@ -278,7 +278,7 @@ Fishes::Fishes(CreateFishesInfo* createInfo)
 
 	for (int i = 0; i < FISH_COUNT; ++i)
 	{
-		float3& fish = velocities[i];
+		glm::vec3& fish = velocities[i];
 
 		float dx = Dist(gen);
 		fish.x = dx;
@@ -287,9 +287,10 @@ Fishes::Fishes(CreateFishesInfo* createInfo)
 		float dz = Dist(gen);
 		fish.y = dz;
 	}
-
+	
 	#ifdef CPU
-
+	positions_P.resize(FISH_COUNT);
+	velocities_P.resize(FISH_COUNT);
 	#else
 	numberOfBlocks = (numberOfFishes + MAX_THREADS - 1) / MAX_THREADS;
 
@@ -306,19 +307,19 @@ Fishes::Fishes(CreateFishesInfo* createInfo)
 	));
 	validateCudaStatus(cudaMalloc(
 		(void**)&dev_soa.velocities,
-		sizeof(float3) * numberOfFishes
+		sizeof(glm::vec3) * numberOfFishes
 	));
 	validateCudaStatus(cudaMalloc(
 		(void**)&dev_soa.positions,
-		sizeof(float3) * numberOfFishes
+		sizeof(glm::vec3) * numberOfFishes
 	));
 	validateCudaStatus(cudaMalloc(
 		(void**)&dev_soa.velocities_P,
-		sizeof(float3) * numberOfFishes
+		sizeof(glm::vec3) * numberOfFishes
 	));
 	validateCudaStatus(cudaMalloc(
 		(void**)&dev_soa.positions_P,
-		sizeof(float3) * numberOfFishes
+		sizeof(glm::vec3) * numberOfFishes
 	));
 	validateCudaStatus(cudaMalloc(
 		(void**)&dev_soa.grid.starts,
@@ -332,14 +333,14 @@ Fishes::Fishes(CreateFishesInfo* createInfo)
 	validateCudaStatus(cudaMemcpy(
 		dev_soa.velocities,
 		velocities.data(),
-		sizeof(float3) * numberOfFishes,
+		sizeof(glm::vec3) * numberOfFishes,
 		cudaMemcpyHostToDevice
 	));
 
 	validateCudaStatus(cudaMemcpy(
 		dev_soa.positions,
 		positions.data(),
-		sizeof(float3) * numberOfFishes,
+		sizeof(glm::vec3) * numberOfFishes,
 		cudaMemcpyHostToDevice
 	));
 	#endif
@@ -352,6 +353,100 @@ void Fishes::update(float frameTime)
 	#else
 	updateGPU(frameTime);
 	#endif
+}
+
+void Fishes::updateCPU(float frameTime)
+{
+	for (int i = 0; i < FISH_COUNT; ++i)
+	{
+		glm::vec3 new_velocity(0);
+		new_velocity += velocities[i];
+		new_velocity += fishGroupBehaviourVelocityFactor(i) * frameTime;
+		new_velocity += wallVelocityFactor(positions[i], new_velocity) * frameTime;
+
+		new_velocity = speedLimit(new_velocity);
+
+		// this just just to not override old value whilst other threads still work {
+		velocities_P[i] = new_velocity;
+		positions_P[i] = positions[i] + new_velocity * frameTime;
+		// }
+	}
+	std::copy(velocities_P.begin(), velocities_P.end(), velocities.begin());
+	std::copy(positions_P.begin(), positions_P.end(), positions.begin());
+}
+
+glm::vec3 Fishes::fishGroupBehaviourVelocityFactor(int i)
+{
+	fishData fishData;
+
+	for (int j = 0; j < FISH_COUNT; ++j)
+	{
+		if (i == j) continue;
+
+		glm::vec3 position_diff = positions[i] - positions[j];
+		float dist = glm::length(position_diff);
+
+		if (dist < params.visibility)
+		{
+			int mod2 = j % 2 == 0 ? -1 : 1;
+			float dist2 = dist * dist;
+
+			fishData.separation_factor += (dist2 > 1e-8)
+				? glm::normalize(position_diff) / (dist2)
+				: glm::vec3(
+					mod2 * 0.001f, 0, mod2 * 0.001f * j
+				);
+			fishData.velocity += velocities[j];
+			fishData.position += positions[j];
+			++fishData.numberOfNeighbours;
+		}
+	}
+
+	fishData.velocity /= fishData.numberOfNeighbours;
+	fishData.position /= fishData.numberOfNeighbours;
+	fishData.alignment_factor = fishData.velocity - velocities[i];
+	fishData.cohesion_factor = fishData.position - positions[i];
+
+	float separation = (i % 2 == 0 ? params.separation : params.separation_alter);
+	float cohesion = (i % 2 == 0 ? params.cohesion : params.cohesion_alter);
+	float alignment = (i % 2 == 0 ? params.alignment : params.alignment_alter);
+
+	return separation * params.SEPARATION_SCALING * fishData.separation_factor
+		+ cohesion * fishData.cohesion_factor
+		+ alignment * fishData.alignment_factor;
+}
+
+glm::vec3 Fishes::wallVelocityFactor(glm::vec3 pos, glm::vec3 vel)
+{
+	glm::vec3 velocity_wall_factor = glm::vec3(0, 0, 0);
+	float half_len = AQUARIUM_LEN / 2.0f;
+	float dist = glm::length(vel);
+
+	if (half_len - pos.x < params.margin)
+		velocity_wall_factor.x -= params.turn * dist * (pos.x + -half_len + params.margin);
+	if (pos.x + half_len < params.margin)
+		velocity_wall_factor.x += params.turn * dist * (-half_len - pos.x + params.margin);
+	if (half_len - pos.y < params.margin)
+		velocity_wall_factor.y -= params.turn * dist * (pos.y - half_len + params.margin);
+	if (pos.y + half_len < params.margin)
+		velocity_wall_factor.y += params.turn * dist * (-half_len - pos.y + params.margin);
+	if (half_len - pos.z < params.margin)
+		velocity_wall_factor.z -= params.turn * dist * (pos.z - half_len + params.margin);
+	if (pos.z + half_len < params.margin)
+		velocity_wall_factor.z += params.turn * dist * (-half_len - pos.z + params.margin);
+
+	return velocity_wall_factor;
+}
+
+glm::vec3 Fishes::speedLimit(glm::vec3 vel)
+{
+	float len = glm::length(vel);
+
+	if (len < params.min_speed)
+		return params.min_speed * glm::normalize(vel);
+	if (len > params.max_speed)
+		return params.max_speed * glm::normalize(vel);
+	return vel;
 }
 
 void Fishes::updateGPU(float frameTime)
@@ -389,7 +484,6 @@ void Fishes::updateGPU(float frameTime)
 Fishes::~Fishes()
 {
 #ifdef CPU
-	
 #else
 	validateCudaStatus(cudaFree(dev_soa.positions));
 	validateCudaStatus(cudaFree(dev_soa.velocities));

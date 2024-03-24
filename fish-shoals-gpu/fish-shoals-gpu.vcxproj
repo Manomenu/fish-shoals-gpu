@@ -110,8 +110,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <ExternalIncludePath>C:\prog\fish-shoals-gpu\includes;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>C:\prog\fish-shoals-gpu\libraries;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>C:\prog\fish-shoals-gpu\fish-shoals-gpu\includes;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>C:\prog\fish-shoals-gpu\fish-shoals-gpu\libraries;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\prog\fish-shoals-gpu\fish-shoals-gpu\includes;$(IncludePath)</IncludePath>

@@ -12,5 +12,7 @@ uniform mat4 projection;
 void main()
 {
     gl_Position = projection * view * model * vec4(vertexPosition, 1.0);
-    color = normalize((vec3(model[3][0], model[3][1], model[3][2]) + 2)) * (gl_InstanceID % 2 == 0 ? 1 : 0);
+    color = normalize((vec3(model[3][0], model[3][1], model[3][2])));
+    color = vec3(max(color.x, 0.25), max(color.y, 0.25), max(color.z, 0.25));
+    color = color * (gl_InstanceID % 2 == 0 ? 1 : 0);
 }

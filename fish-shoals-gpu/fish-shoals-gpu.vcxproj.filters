@@ -43,9 +43,6 @@
     <ClCompile Include="imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="app.cpp">
-      <Filter>control</Filter>
-    </ClCompile>
     <ClCompile Include="glad.c">
       <Filter>utils</Filter>
     </ClCompile>
@@ -66,6 +63,9 @@
     </ClCompile>
     <ClCompile Include="gui.cpp">
       <Filter>model\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="app.cpp">
+      <Filter>control\app</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,17 +100,11 @@
     <ClInclude Include="imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="app.h">
-      <Filter>control</Filter>
-    </ClInclude>
     <ClInclude Include="cuda_utils.cuh">
       <Filter>utils</Filter>
     </ClInclude>
     <ClInclude Include="stb_image.h">
       <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="shader.h">
-      <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="gui_model.h">
       <Filter>view\gui_model</Filter>
@@ -147,6 +141,12 @@
     </ClInclude>
     <ClInclude Include="camera.h">
       <Filter>model\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="shader.h">
+      <Filter>view\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="app.h">
+      <Filter>control\app</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +214,9 @@
     </Filter>
     <Filter Include="model\camera">
       <UniqueIdentifier>{2576a562-437d-475f-9ac2-fa5d7f414744}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view\shader">
+      <UniqueIdentifier>{3e9d50eb-d15a-4476-8ca7-7a3fffdb1eb2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -66,8 +66,10 @@ class Fishes
 {
 public:
 	int numberOfFishes, numberOfBlocks;
-	std::vector<float3> positions;
-	std::vector<float3> velocities;
+	std::vector<glm::vec3> positions;
+	std::vector<glm::vec3> velocities;
+	std::vector<glm::vec3> positions_P;
+	std::vector<glm::vec3> velocities_P;
 	fishesParams params;
 
 
@@ -80,4 +82,7 @@ public:
 	void update(float frameTime);
 	void updateGPU(float frameTime);
 	void updateCPU(float frameTime);
+	glm::vec3 fishGroupBehaviourVelocityFactor(int i);
+	glm::vec3 wallVelocityFactor(glm::vec3 pos, glm::vec3 vel);
+	glm::vec3 speedLimit(glm::vec3 vel);
 };

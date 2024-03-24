@@ -6,13 +6,6 @@
 #include "fish_model.cuh"
 #include "fishes.cuh"
 
-//__global__ void setFishesVertices(float* dev_vbo_data, float* fishes_positions, PyramidModel* fishModel)
-//{
-//	int tid = threadIdx.x + blockDim.x * blockIdx.x;
-//
-//	dev_vbo_data[tid] = tid;
-//}
-
 struct FishesModelCreateInfo {
 	int numberOfFishes;
 };
@@ -33,4 +26,9 @@ public:
 	~FishesModel();
 	void render(Shader* shader, Fishes* fishes,
 		const glm::mat4& view, const glm::mat4& projection);
+	void setModels(
+		glm::mat4* models, 
+		std::vector<glm::vec3>& positions, 
+		std::vector<glm::vec3>& velocities
+	);
 };

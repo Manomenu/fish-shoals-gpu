@@ -56,7 +56,12 @@ void Gui::update()
 
     if (ImGui::CollapsingHeader("Simulation information"))
     {
-        ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d fishes", FISH_COUNT);
+        #ifdef CPU
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "Simulation mode: CPU");
+        #else
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "Simulation mode: GPU");
+        #endif
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "Fishes: %d", FISH_COUNT);
     }
 
     if (ImGui::CollapsingHeader("Control information"))
