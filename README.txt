@@ -31,3 +31,11 @@ OPTIMALIZATION
 Mainly I use dynamically adjustable to fishes view range unit grid, so every fish only 
 check its close neighbourhood, not all the fishes in the simulation.
 -------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------
+VIDEO
+-------------------------------------------------------------------------------------------
+![showcase-video](https://www.youtube.com/shorts/P9PdMS1-Ul0)
+-------------------------------------------------------------------------------------------
+
