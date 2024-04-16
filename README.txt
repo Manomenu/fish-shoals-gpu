@@ -30,6 +30,12 @@ OPTIMALIZATION
 -------------------------------------------------------------------------------------------
 Mainly I use dynamically adjustable to fishes view range unit grid, so every fish only 
 check its close neighbourhood, not all the fishes in the simulation.
+
+For quick rendering i use instanced drawing, one fish model is rendered many times 
+with different model matrices. Those matrices are computed in cuda kernel. 
+
+For quicker data flow computation data stays in gpu memory all the time, I used 
+cuda-openGL interop.
 -------------------------------------------------------------------------------------------
 
 
