@@ -1,4 +1,14 @@
-Shoal of fishes by Piotr Gugnowski 320690
+Shoal of fishes OpenGL + Cuda simulation project
+
+-------------------------------------------------------------------------------------------
+Overview
+-------------------------------------------------------------------------------------------
+You can watch the simulation of loads of fishes forming shoals. You can manipulate 
+group behaviour by changing some parameters in graphical user interface. User can 
+fly around the simulation with free camera.
+(Improvement idea: camera independent from scene rendering)
+-------------------------------------------------------------------------------------------
+
 
 -------------------------------------------------------------------------------------------
 IMPORTANT
