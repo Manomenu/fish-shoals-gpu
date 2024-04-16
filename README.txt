@@ -36,6 +36,6 @@ check its close neighbourhood, not all the fishes in the simulation.
 -------------------------------------------------------------------------------------------
 VIDEO
 -------------------------------------------------------------------------------------------
-[![Video Thumbnail](https://i.ytimg.com/vi/P9PdMS1-Ul0/maxresdefault.jpg)](https://youtube.com/shorts/P9PdMS1-Ul0?feature=shared)
+[![Video Thumbnail](https://img.youtube.com/vi/P9PdMS1-Ul0/0.jpg)](https://youtube.com/shorts/P9PdMS1-Ul0?feature=shared)
 -------------------------------------------------------------------------------------------
 
